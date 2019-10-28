@@ -1,14 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { RadSideDrawer } from "nativescript-ui-sidedrawer";
-import * as app from "tns-core-modules/application";
-import { LocationService } from "~/app/services/location.service";
-import { Location } from "nativescript-geolocation";
-import { MapboxViewApi } from "nativescript-mapbox";
-import { Subject } from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
+import * as app from 'tns-core-modules/application';
+import { LocationService } from '~/app/services/location.service';
+import { Location } from 'nativescript-geolocation';
+import { MapboxViewApi } from 'nativescript-mapbox';
+import { Subject } from 'rxjs';
 
 @Component({
-    selector: "Home",
-    templateUrl: "./home.component.html"
+    selector: 'Home',
+    templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
     geoLocation: Subject<Location> = new Subject<Location>();
@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit {
 
     ngOnInit(): void {
         // Instantiate geoLoc object for map to initalize
+        console.log('Component initialized');
     }
 
     onDrawerButtonTap(): void {
@@ -39,13 +40,13 @@ export class HomeComponent implements OnInit {
                 id: 1,
                 lat: this.locationService.currentLat,
                 lng: this.locationService.currentLng,
-                title: "You are here!",
-                subtitle: "Not your real location, the emulated one :("
+                title: 'You are here!',
+                subtitle: 'Not your real location, the emulated one :('
             }]);
         this.map.trackUser({
-                mode: "FOLLOW_WITH_HEADING",
-                animated: true
-            });
+            mode: 'FOLLOW_WITH_HEADING',
+            animated: true
+        });
     }
 
 }
