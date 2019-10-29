@@ -3,13 +3,14 @@ import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import * as app from 'tns-core-modules/application';
 
 @Component({
-    selector: 'Settings',
-    templateUrl: './settings.component.html'
+    selector: 'Auth',
+    templateUrl: './auth.component.html',
+    styleUrls: ['./auth.component.css']
 })
-export class SettingsComponent implements OnInit {
+export class AuthComponent implements OnInit {
 
     ngOnInit(): void {
-        // Init your component properties here.
+        //
     }
 
     onDrawerButtonTap(): void {
