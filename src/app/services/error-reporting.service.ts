@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { LoggingService } from '~/app/services/logging.service';
 import * as Toast from 'nativescript-toasts';
+import { LoggingService } from '~/app/services/logging.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +13,7 @@ export class ErrorReportingService {
     showToUser(message: string): void {
         this.logger.simpleLog(`Error reported. Displaying to user Toast with ${message} as error`);
         Toast.show({
-            duration: Toast.DURATION.SHORT,
+            duration: Toast.DURATION.LONG,
             position: Toast.POSITION.BOTTOM,
             text: message
         });

@@ -6,21 +6,21 @@ import { Injectable } from '@angular/core';
 export class LoggingService {
     private _environment: 'dev' | 'prod';
 
-    simpleLog(message: string): void {
+    simpleLog(message: string | number): void {
         if (this.environment === 'dev') {
-            console.log(`CustomErrorLog: ${message}`);
+            console.log(`CustomLog: ${message}`);
         }
     }
 
     multiLog(...message): void {
-        console.log('CustomErrorLog: BEGIN \n');
+        console.log('CustomLog: BEGIN \n');
         if (this.environment === 'dev') {
             message.forEach(m => {
                 console.log(m);
                 console.log('\n');
             });
         }
-        console.log('CustomErrorLog: END \n');
+        console.log('CustomLog: END \n');
     }
 
     get environment(): 'dev' | 'prod' {

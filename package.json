@@ -25,6 +25,7 @@
     "@angular/router": "~8.2.0",
     "@nativescript/tslint-rules": "0.0.4",
     "angular-tslint-rules": "^1.20.1",
+    "moment": "^2.24.0",
     "nativescript-angular": "~8.2.0",
     "nativescript-exit": "^1.0.1",
     "nativescript-geolocation": "^5.1.0",
