@@ -1,55 +1,67 @@
-import { Injectable } from "@angular/core";
-import * as geolocation from "nativescript-geolocation";
-import { Accuracy } from "tns-core-modules/ui/enums";
+import { Injectable } from '@angular/core';
+import * as geolocation from 'nativescript-geolocation';
+import { Observable } from 'rxjs';
+import { Accuracy } from 'tns-core-modules/ui/enums';
+import { LoggingService } from '~/app/services/logging.service';
 
 @Injectable({
-    providedIn: "root"
+    providedIn: 'root'
 })
 export class LocationService {
-    currentLat: number;
-    currentLng: number;
-
+    private _currentLng: number;
+    private _currentLat: number;
     private _location: Location;
 
-    constructor() {
+    constructor(private logger: LoggingService) {
         //
     }
 
-    request() {
-        console.log("enableLocationRequest()");
-        geolocation.enableLocationRequest().then(() => {
-            console.log("location enabled!");
-            this.watch();
-        }, (e) => {
-            console.log("Failed to enable", e);
-        });
+    sendLocationToServer(): Observable<boolean> {
+        // Mock send until server ready
+        this.logger.multiLog(this, 'Sending location to server....');
+
+        return new Observable<boolean>((resolver => {
+            setTimeout(() => {
+                resolver.complete();
+            }, 2000);
+        }));
+
     }
 
-    watch() {
-        console.log("watchLocation()");
-        geolocation.watchLocation((position) => {
-            this.currentLat = position.latitude;
-            this.currentLng = position.longitude;
-        }, (e) => {
-            console.log("failed to get location");
+    /**
+     * @description Prompts the user for GeoLocation Permissions
+     */
+    requestGeoPermissions(): void {
+        this.logger.simpleLog('Requesting geo permissions....');
+        geolocation.enableLocationRequest()
+            .then(() => {
+                this.subscribeToLocation();
+            }, e => {
+                this.logger.simpleLog(e);
+            });
+    }
+
+    /**
+     * @description Keeps the current latitude and longitude updated
+     */
+    subscribeToLocation(): void {
+        this.logger.simpleLog('Subscribed to location...');
+        geolocation.watchLocation(position => {
+            this._currentLat = position.latitude;
+            this._currentLng = position.longitude;
+        }, e => {
+            this.logger.simpleLog('Failed to get geolocation');
         }, {
             desiredAccuracy: Accuracy.high,
             minimumUpdateTime: 500
         });
     }
 
-    /**
-     * Returns the current location of the user
-     * Will check and request permissions if none
-     */
-    get currentLocation(): Promise<geolocation.Location> {
-        if (!geolocation.isEnabled()) {
-            geolocation.enableLocationRequest().then(() => {
-                return geolocation.getCurrentLocation({desiredAccuracy: Accuracy.high});
-            });
-        } else {
-            return geolocation.getCurrentLocation({desiredAccuracy: Accuracy.high});
-        }
+    get currentLat(): number {
+        return this._currentLat;
+    }
 
+    get currentLng(): number {
+        return this._currentLng;
     }
 }

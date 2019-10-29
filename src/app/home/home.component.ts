@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
-import * as app from 'tns-core-modules/application';
-import { LocationService } from '~/app/services/location.service';
 import { Location } from 'nativescript-geolocation';
 import { MapboxViewApi } from 'nativescript-mapbox';
+import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import { Subject } from 'rxjs';
+import * as app from 'tns-core-modules/application';
+import { LocationService } from '~/app/services/location.service';
+import { LoggingService } from '~/app/services/logging.service';
 
 @Component({
     selector: 'Home',
@@ -14,18 +15,19 @@ export class HomeComponent implements OnInit {
     geoLocation: Subject<Location> = new Subject<Location>();
     private map: MapboxViewApi;
 
-    constructor(private locationService: LocationService) {
+    constructor(private locationService: LocationService, private logger: LoggingService) {
         // Use the component constructor to inject providers.
-        this.locationService.watch();
+        this.logger.simpleLog('Home Component -- Constructor');
     }
 
     ngOnInit(): void {
         // Instantiate geoLoc object for map to initalize
-        console.log('Component initialized');
+        this.logger.multiLog(this, 'Home component -- Init');
+        this.locationService.subscribeToLocation();
     }
 
     onDrawerButtonTap(): void {
-        const sideDrawer = <RadSideDrawer>app.getRootView();
+        const sideDrawer = app.getRootView() as RadSideDrawer;
         sideDrawer.showDrawer();
     }
 
@@ -43,10 +45,15 @@ export class HomeComponent implements OnInit {
                 title: 'You are here!',
                 subtitle: 'Not your real location, the emulated one :('
             }]);
+
         this.map.trackUser({
             mode: 'FOLLOW_WITH_HEADING',
             animated: true
         });
+    }
+
+    private _updateServerLocationOfUser(howOften = 60) {
+
     }
 
 }

@@ -1,17 +1,15 @@
-import { Component, OnInit } from "@angular/core";
-import { NavigationEnd, Router } from "@angular/router";
-import { RouterExtensions } from "nativescript-angular/router";
-import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
-import { filter } from "rxjs/operators";
-import * as app from "tns-core-modules/application";
-import { Location, enableLocationRequest, isEnabled, getCurrentLocation } from "nativescript-geolocation";
-import { Accuracy } from "tns-core-modules/ui/enums";
-import { LocationService } from "~/app/services/location.service";
-import { exit } from "nativescript-exit";
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { RouterExtensions } from 'nativescript-angular/router';
+import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from 'nativescript-ui-sidedrawer';
+import { filter } from 'rxjs/operators';
+import * as app from 'tns-core-modules/application';
+import { LocationService } from '~/app/services/location.service';
+import { LoggingService } from '~/app/services/logging.service';
 
 @Component({
-    selector: "ns-app",
-    templateUrl: "app.component.html"
+    selector: 'ns-app',
+    templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
     private _activatedUrl: string;
@@ -19,17 +17,20 @@ export class AppComponent implements OnInit {
 
     constructor(private router: Router,
                 private routerExtensions: RouterExtensions,
-                private locationService: LocationService) {
+                private locationService: LocationService,
+                private loggerService: LoggingService) {
+
+        loggerService.environment = 'dev';
     }
 
     ngOnInit(): void {
-        this._activatedUrl = "/home";
+        this._activatedUrl = '/home';
         this._sideDrawerTransition = new SlideInOnTopTransition();
 
         this.router.events
             .pipe(filter((event: any) => event instanceof NavigationEnd))
             .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects);
-        this.locationService.request();
+        this.locationService.requestGeoPermissions();
     }
 
     isComponentSelected(url: string): boolean {
@@ -39,11 +40,11 @@ export class AppComponent implements OnInit {
     onNavItemTap(navItemRoute: string): void {
         this.routerExtensions.navigate([navItemRoute], {
             transition: {
-                name: "fade"
+                name: 'fade'
             }
         });
 
-        const sideDrawer = <RadSideDrawer>app.getRootView();
+        const sideDrawer = app.getRootView() as RadSideDrawer;
         sideDrawer.closeDrawer();
     }
 
