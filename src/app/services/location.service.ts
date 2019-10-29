@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as geolocation from 'nativescript-geolocation';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs';
+import { delay } from 'rxjs/internal/operators';
 import { Accuracy } from 'tns-core-modules/ui/enums';
+import { ErrorReportingService } from '~/app/services/error-reporting.service';
 import { LoggingService } from '~/app/services/logging.service';
 
 @Injectable({
@@ -12,20 +14,20 @@ export class LocationService {
     private _currentLat: number;
     private _location: Location;
 
-    constructor(private logger: LoggingService) {
+    constructor(private logger: LoggingService,
+                private errorReporter: ErrorReportingService) {
         //
     }
 
-    sendLocationToServer(): Observable<boolean> {
+    sendLocationToServer(): Promise<boolean> {
         // Mock send until server ready
+
+        // What happens if home is not reachable?
+        // Perhaps this should be appended to a constant in client side
+        // and then it should attempt to again reach the server
         this.logger.multiLog(this, 'Sending location to server....');
 
-        return new Observable<boolean>((resolver => {
-            setTimeout(() => {
-                resolver.complete();
-            }, 2000);
-        }));
-
+        return of(true).pipe(delay(2000)).toPromise().then(() => true);
     }
 
     /**
@@ -36,8 +38,8 @@ export class LocationService {
         geolocation.enableLocationRequest()
             .then(() => {
                 this.subscribeToLocation();
-            }, e => {
-                this.logger.simpleLog(e);
+            }, () => {
+                this.errorReporter.showToUser('Permissions where denied, this app cannot run without them');
             });
     }
 
@@ -49,8 +51,8 @@ export class LocationService {
         geolocation.watchLocation(position => {
             this._currentLat = position.latitude;
             this._currentLng = position.longitude;
-        }, e => {
-            this.logger.simpleLog('Failed to get geolocation');
+        }, (e: Error) => {
+            this.errorReporter.showToUser(e.message);
         }, {
             desiredAccuracy: Accuracy.high,
             minimumUpdateTime: 500

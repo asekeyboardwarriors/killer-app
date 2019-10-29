@@ -8,17 +8,19 @@ export class LoggingService {
 
     simpleLog(message: string): void {
         if (this.environment === 'dev') {
-            console.log(message);
+            console.log(`CustomErrorLog: ${message}`);
         }
     }
 
     multiLog(...message): void {
+        console.log('CustomErrorLog: BEGIN \n');
         if (this.environment === 'dev') {
             message.forEach(m => {
                 console.log(m);
                 console.log('\n');
             });
         }
+        console.log('CustomErrorLog: END \n');
     }
 
     get environment(): 'dev' | 'prod' {
