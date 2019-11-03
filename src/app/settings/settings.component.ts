@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import * as app from 'tns-core-modules/application';
 import { TextField } from 'ui/text-field';
@@ -10,6 +10,8 @@ import { UserSettingsService } from '~/app/services/User/user-settings.service';
     templateUrl: './settings.component.html'
 })
 export class SettingsComponent implements OnInit {
+    @ViewChild('frequency', {static: false}) freqText: ElementRef;
+
     userSettings: IUserPreferences;
     isEditing = false;
     isLoading = false;
@@ -21,6 +23,7 @@ export class SettingsComponent implements OnInit {
     ngOnInit(): void {
         // Init your component properties here.
         this.userSettings.locationUpdateFrequency = this.userPreferences.userPreferences.locationUpdateFrequency;
+        console.log(this.userPreferences.userPreferences.locationUpdateFrequency);
     }
 
     onDrawerButtonTap(): void {
@@ -43,5 +46,7 @@ export class SettingsComponent implements OnInit {
 
     cancel(): void {
         this.canEdit();
+        const textField = this.freqText.nativeElement as TextField;
+        textField.text = (this.userSettings.locationUpdateFrequency / 1000).toString();
     }
 }
