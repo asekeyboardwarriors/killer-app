@@ -23,8 +23,6 @@ export class PermissionsService {
                     android.Manifest.permission.INTERNET,
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                    android.Manifest.permission.READ_PHONE_STATE,
-                    android.Manifest.permission.READ_SMS
                 ];
                 permissions.requestPermissions(perms, 'I need these permissions to work!')
                     .then(() => {
