@@ -36,20 +36,18 @@
                 text="&#xf044;"
                 (tap)="canEdit()"
         ></Label>
-       <Block [isLoading]="isLoading">
-           <Label
-                   width="10%"
-                   class="fa m-l-30"
-                   text="&#xf00c;"
-                   (tap)="save(frequency)"
-           ></Label>
-           <Label
-                   width="10%"
-                   *ngIf="isEditing"
-                   class="fa m-l-30"
-                   text="&#xf00d;"
-                   (tap)="cancel()"
-           ></Label>
-       </Block>
+        <Label
+                width="10%"
+                class="fa m-l-30"
+                text="&#xf00c;"
+                (tap)="save(frequency)"
+        ></Label>
+        <Label
+                width="10%"
+                *ngIf="isEditing"
+                class="fa m-l-30"
+                text="&#xf00d;"
+                (tap)="cancel()"
+        ></Label>
     </FlexboxLayout>
 </FlexboxLayout>
