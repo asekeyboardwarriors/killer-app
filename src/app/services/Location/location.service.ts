@@ -95,7 +95,7 @@ export class LocationService {
         }, (e: Error) => {
             this.errorReporter.showToUser(e.message);
         }, {
-            desiredAccuracy: Accuracy.any,
+            desiredAccuracy: Accuracy.high,
             minimumUpdateTime: 500
         });
     }

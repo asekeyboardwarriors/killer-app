@@ -39,7 +39,9 @@ export class AppComponent implements OnInit {
         this.router.events
             .pipe(filter((event: any) => event instanceof NavigationEnd))
             .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects);
-        this.permissionService.requestAllPermissions();
+        this.permissionService.requestAllPermissions().then(() => {
+            this.locationService.subscribeToLocation();
+        });
     }
 
     isComponentSelected(url: string): boolean {

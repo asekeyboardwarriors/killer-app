@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             lat: this.locationService.location.latitude
         });
         args.map.showUserLocation = true;
-        const firstMarker = {
+        const firstMarker: MapboxMarker = {
             id: 2, // can be user in 'removeMarkers()'
             lat: this.location.latitude, // mandatory
             lng: this.location.longitude, // mandatory
@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             // icon: 'res://cool_marker', // preferred way, otherwise use:
             iconPath: 'res/markers/home_marker.png',
             selected: true   // makes the callout show immediately when the marker is added (note: only 1 marker can be selected at a time)
-        } as MapboxMarker;
+        };
         args.map.addMarkers([firstMarker]);
         args.map.trackUser({
             mode: 'FOLLOW_WITH_HEADING', // "NONE" | "FOLLOW" | "FOLLOW_WITH_HEADING" | "FOLLOW_WITH_COURSE"
