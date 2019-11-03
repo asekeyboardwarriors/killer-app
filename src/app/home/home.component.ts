@@ -44,14 +44,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     onMapReady(args): void {
         this.logger.simpleLog('Map is ready');
         this._map = args.map;
-        this._map.addMarkers([
-            {
-                id: 1,
-                lat: this.locationService.location.longitude,
-                lng: this.locationService.location.latitude,
-                title: 'You are here!',
-                subtitle: 'Not your real location, the emulated one :('
-            }]);
         this._map.trackUser({
             mode: 'FOLLOW_WITH_HEADING',
             animated: true

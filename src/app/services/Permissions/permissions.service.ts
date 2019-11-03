@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import * as permissions from 'nativescript-permissions';
 import { isAndroid } from 'platform';
+import { LocationService } from '~/app/services/Location/location.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PermissionsService {
+    constructor(private locServices: LocationService) {
+    }
 
     /**
      * Attempts to requests permissions from the user
@@ -29,6 +32,8 @@ export class PermissionsService {
                     console.log('Uh oh, no permissions - plan B time!');
                 });
 
+        } else {
+            this.locServices.requestGeoPermissions();
         }
     }
 
