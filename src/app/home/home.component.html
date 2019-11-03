@@ -28,16 +28,11 @@
             <Mapbox
                     accessToken="sk.eyJ1IjoiZWRkeXZlcmJydWdnZW4iLCJhIjoia1JpRW82NCJ9.OgnvpsKzB3GJhzyofQNUBw"
                     mapStyle="traffic_day"
-                    latitude="51.9280572"
-                    longitude="4.4201952"
+                    [latitude]="locationService.location.latitude"
+                    [longitude]="locationService.location.longitude"
                     zoomLevel="7"
-                    delay="450"
                     showUserLocation="true"
-                    hideCompass="false"
-                    disableZoom="false"
                     disableRotation="true"
-                    disableScroll="false"
-                    disableTilt="false"
                     (mapReady)="onMapReady($event)">
             </Mapbox>
         </ContentView>
