@@ -1,0 +1,39 @@
+// Import app variables
+@import '../../app-variables';
+// Import app variables
+// Import the theme’s main ruleset - both index and platform specific.
+@import '~nativescript-theme-core/scss/index';
+@import '~nativescript-theme-core/scss/platforms/index.android';
+// Import common styles
+@import '../../app-common';
+
+
+.label {
+  color: $accent-dark;
+}
+
+@mixin line {
+  @extend .hr-light
+}
+
+.hr-invalid {
+  @include line;
+  color: red;
+  background-color: red;
+}
+ActionBar {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+LinearProgressBar {
+  margin-top: 0px;
+  padding-top: 0px;
+}
+.invalid {
+  color: red;
+}
+
+.input-field {
+  width: 75%;
+}

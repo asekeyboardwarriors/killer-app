@@ -117,7 +117,7 @@ module.exports = env => {
         watchOptions: {
             ignored: [
                 appResourcesFullPath,
-                // Don't watch hidden files
+                // Don't subscribeToLocation hidden files
                 "**/.*",
             ]
         },
@@ -279,7 +279,7 @@ module.exports = env => {
             // check out https://github.com/nativescript/worker-loader
             new NativeScriptWorkerPlugin(),
             ngCompilerPlugin,
-            // Does IPC communication with the {N} CLI to notify events when running in watch mode.
+            // Does IPC communication with the {N} CLI to notify events when running in subscribeToLocation mode.
             new nsWebpack.WatchStateLoggerPlugin(),
         ],
     };

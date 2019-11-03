@@ -2,8 +2,7 @@
     <GridLayout tkDrawerContent rows="auto, *" class="sidedrawer sidedrawer-left">
         <StackLayout row="0" class="sidedrawer-header">
             <Label class="sidedrawer-header-image fa" text="&#xf2bd;"></Label>
-            <Label class="sidedrawer-header-brand" text="User Name"></Label>
-            <Label class="footnote" text="username@mail.com"></Label>
+            <Label class="footnote" [text]="(user | async).email"></Label>
         </StackLayout>
     
         <ScrollView row="1" class="sidedrawer-content">

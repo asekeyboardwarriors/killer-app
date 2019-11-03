@@ -1,11 +1,13 @@
-import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
-import { NativeScriptCommonModule } from "nativescript-angular/common";
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NativeScriptCommonModule } from 'nativescript-angular/common';
 
-import { HomeRoutingModule } from "./home-routing.module";
-import { HomeComponent } from "./home.component";
+import { HomeRoutingModule } from './home-routing.module';
+import { HomeComponent } from './home.component';
 
-import { registerElement } from "nativescript-angular/element-registry";
-registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView);
+import { registerElement } from 'nativescript-angular/element-registry';
+
+// tslint:disable-next-line:no-require-imports
+registerElement('Mapbox', () => require('nativescript-mapbox').MapboxView);
 
 @NgModule({
     imports: [
@@ -19,4 +21,5 @@ registerElement("Mapbox", () => require("nativescript-mapbox").MapboxView);
         NO_ERRORS_SCHEMA
     ]
 })
-export class HomeModule { }
+export class HomeModule {
+}
