@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import * as geolocation from 'nativescript-geolocation';
 import { Location } from 'nativescript-geolocation';
-import { of, Subscription, throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators';
 import { Accuracy } from 'tns-core-modules/ui/enums';
 import { LocationFailureHandling } from '~/app/models/location-failure-handling';

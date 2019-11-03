@@ -6,10 +6,10 @@ import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import * as app from 'tns-core-modules/application';
 import { UserLogin } from '~/app/models/User/user-login';
+import { AuthService } from '~/app/services/User/auth.service';
 import { LocationService } from '~/app/services/Location/location.service';
 import { LoggingService } from '~/app/services/Log/logging.service';
 import { PermissionsService } from '~/app/services/Permissions/permissions.service';
-import { AuthService } from '~/app/services/User/auth.service';
 
 @Component({
     selector: 'ns-app',

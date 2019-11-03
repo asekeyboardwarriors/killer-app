@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular';
-import { Telephony } from 'nativescript-telephony';
 import { UserLogin } from '~/app/models/User/user-login';
-import { AuthService } from '~/app/services/User/auth.service';
 import { LoggingService } from '~/app/services/Log/logging.service';
+import { AuthService } from '~/app/services/User/auth.service';
 import { UserAlertsService } from '~/app/services/User/user-alerts.service';
 
 @Component({
@@ -39,14 +38,6 @@ export class AuthComponent implements OnInit {
         this.loginForm.valueChanges.subscribe((form: UserLogin) => {
             this.userLogin = form;
         });
-        Telephony().then(resolved => {
-            console.log('resolved >', resolved);
-            console.dir(resolved);
-        }).catch(error => {
-            console.error('error >', error);
-            console.dir(error);
-        });
-
     }
 
     onSubmit(): void {
