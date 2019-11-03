@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MapboxViewApi } from 'nativescript-mapbox';
+import { registerElement } from 'nativescript-angular/element-registry';
+import { Location } from 'nativescript-geolocation';
+import { Mapbox, MapboxMarker, MapboxViewApi } from 'nativescript-mapbox';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import { interval, Subscription } from 'rxjs';
 import * as app from 'tns-core-modules/application';
@@ -7,12 +9,17 @@ import { LocationFailureHandling } from '~/app/models/location-failure-handling'
 import { LocationService } from '~/app/services/Location/location.service';
 import { LoggingService } from '~/app/services/Log/logging.service';
 import { UserSettingsService } from '~/app/services/User/user-settings.service';
+// tslint:disable-next-line:no-require-imports
+registerElement('Mapbox', () => require('nativescript-mapbox').MapboxView);
 
 @Component({
     selector: 'Home',
     templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy {
+
+    location: Location;
+
     private _map: MapboxViewApi;
     private _serverInformSub: Subscription;
 
@@ -27,6 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         // Instantiate geoLoc object for map to initalize
         this.logger.multiLog(this, 'Home component -- Init');
         this.locationService.subscribeToLocation();
+        this.location = this.locationService.location;
         this._updateServerLocationOfUser(this.userSettings.userPreferences.locationUpdateFrequency);
     }
 
@@ -42,12 +50,22 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     onMapReady(args): void {
-        this.logger.simpleLog('Map is ready');
         this._map = args.map;
-        this._map.trackUser({
-            mode: 'FOLLOW_WITH_HEADING',
-            animated: true
+        args.map.setCenter({
+            lng: this.locationService.location.longitude,
+            lat: this.locationService.location.latitude
         });
+        const firstMarker = {
+            id: 2, // can be user in 'removeMarkers()'
+            lat: this.location.latitude, // mandatory
+            lng: this.location.longitude, // mandatory
+            title: 'One-line title here', // no popup unless set
+            subtitle: 'Infamous subtitle!',
+            // icon: 'res://cool_marker', // preferred way, otherwise use:
+            iconPath: 'res/markers/home_marker.png',
+            selected: true, // makes the callout show immediately when the marker is added (note: only 1 marker can be selected at a time)
+        } as MapboxMarker;
+        args.map.addMarkers([firstMarker]);
     }
 
     /**
@@ -62,5 +80,4 @@ export class HomeComponent implements OnInit, OnDestroy {
                 .catch(console.log);
         });
     }
-
 }

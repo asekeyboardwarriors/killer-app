@@ -27,13 +27,14 @@
         >
             <Mapbox
                     accessToken="sk.eyJ1IjoiZWRkeXZlcmJydWdnZW4iLCJhIjoia1JpRW82NCJ9.OgnvpsKzB3GJhzyofQNUBw"
-                    mapStyle="traffic_day"
-                    [latitude]="locationService.location.latitude"
-                    [longitude]="locationService.location.longitude"
+                    mapStyle="traffic_night"
                     zoomLevel="7"
-                    showUserLocation="true"
+                    [latitude]="location.latitude"
+                    [longitude]="location.longitude"
+                    [showUserLocation]="true"
                     disableRotation="true"
-                    (mapReady)="onMapReady($event)">
+                    (mapReady)="onMapReady($event)"
+            >
             </Mapbox>
         </ContentView>
     </StackLayout>
