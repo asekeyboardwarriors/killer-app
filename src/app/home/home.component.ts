@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MapboxViewApi } from 'nativescript-mapbox';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
+import { interval, Subscription } from 'rxjs';
 import * as app from 'tns-core-modules/application';
 import { LocationFailureHandling } from '~/app/models/location-failure-handling';
-import { LocationService } from '~/app/services/location.service';
-import { LoggingService } from '~/app/services/logging.service';
+import { LocationService } from '~/app/services/Location/location.service';
+import { LoggingService } from '~/app/services/Log/logging.service';
+import { UserSettingsService } from '~/app/services/User/user-settings.service';
 
 @Component({
     selector: 'Home',
@@ -12,10 +14,11 @@ import { LoggingService } from '~/app/services/logging.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
     private _map: MapboxViewApi;
-    private _serverInformSub: number;
+    private _serverInformSub: Subscription;
 
     constructor(private locationService: LocationService,
-                private logger: LoggingService) {
+                private logger: LoggingService,
+                private userSettings: UserSettingsService) {
         // Use the component constructor to inject providers.
         this.logger.simpleLog('Home Component -- Constructor');
     }
@@ -24,11 +27,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         // Instantiate geoLoc object for map to initalize
         this.logger.multiLog(this, 'Home component -- Init');
         this.locationService.subscribeToLocation();
-        this._updateServerLocationOfUser();
+        this._updateServerLocationOfUser(this.userSettings.userPreferences.locationUpdateFrequency);
     }
 
     ngOnDestroy(): void {
-        clearInterval(this._serverInformSub);
+        console.log('Home -- On Destroy');
+        this.locationService.unsubscribeToLocation();
+        this._serverInformSub.unsubscribe();
     }
 
     onDrawerButtonTap(): void {
@@ -64,9 +69,11 @@ export class HomeComponent implements OnInit, OnDestroy {
      */
     private _updateServerLocationOfUser(howOften = 5000): void {
         this.logger.simpleLog(`Tracking user every ${howOften} seconds`);
-        this._serverInformSub = setInterval(() => {
-            this.locationService.sendLocationToServer(LocationFailureHandling.SILENT_RETRY, this.locationService.location);
-        }, howOften);
+        this._serverInformSub = interval(howOften).subscribe(next => {
+            this.locationService
+                .sendLocationToServer(LocationFailureHandling.SILENT_RETRY, this.locationService.location)
+                .catch(console.log);
+        });
     }
 
 }

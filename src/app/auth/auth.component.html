@@ -1,21 +1,99 @@
-<ActionBar class="action-bar">
-    <!--
-    Use the NavigationButton as a side-drawer button in Android
-    because ActionItems are shown on the right side of the ActionBar
-    -->
-    <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
-    <!--
-    Use the ActionItem for IOS with position set to left. Using the
-    NavigationButton as a side-drawer button in iOS is not possible,
-    because its function is to always navigate back in the application.
-    -->
-    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
-                ios.position="left">
-    </ActionItem>
-    <Label class="action-bar-title" text="Sign up"></Label>
-</ActionBar>
+<DomActionBar
+        [title]="isLoggingIn ? LOG_IN : REGISTER"
+        [showMenu]="false"
+        [isAppLoading]="isFormLoading"
+>
+</DomActionBar>
+<FlexboxLayout
+        [formGroup]="loginForm"
+        class="form"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center">
+    <FlexboxLayout flexDirection="column"
+                   class="input-field">
+        <Label
+                order="1"
+                class="label m-b-5"
+                text="Email"
+        ></Label>
+        <TextField
+                order="2"
+                keyboardType="email"
+                formControlName="email"
+                hint="Email"
+                class="input"
+        >
+        </TextField>
+        <StackLayout
+                order="3"
+                *ngIf="loginForm.get('email').valid || !this.loginForm.touched; else invalidEmail"
+                class="hr-light">
+        </StackLayout>
+        <ng-template #invalidEmail>
+            <StackLayout class="hr-invalid"
+                         order="4"></StackLayout>
+            <Label order="5"
+                   class="invalid"
+                   *ngIf="loginForm.get('email').hasError('required')"
+                   text="Email is required!"></Label>
+            <Label order="5"
+                   class="invalid"
+                   *ngIf="loginForm.get('email').hasError('email')"
+                   text="Please enter a valid email!"></Label>
+        </ng-template>
 
-<GridLayout class="page page-content">
-<!--    <Label class="page-icon fa" text="&#xf1ea;"></Label>-->
-    <Label class="page-placeholder" text="<!-- Page content goes here -->"></Label>
-</GridLayout>
+    </FlexboxLayout>
+    <FlexboxLayout
+            flexDirection="column"
+            class="input-field">
+
+        <Label
+                order="1"
+                class="label m-b-5"
+                text="Password"></Label>
+        <FlexboxLayout>
+            <TextField
+                    width="90%"
+                    formControlName="password"
+                    [secure]="hidden"
+                    hint="Password"
+                    class="input">
+            </TextField>
+            <Label
+                    (tap)="togglePassword()"
+                    [text]="hidden ? '&#xf06e;' : '&#xf070;'"
+                    class="fa"
+            ></Label>
+        </FlexboxLayout>
+        <StackLayout
+                order="3"
+                *ngIf="loginForm.get('password').valid || !this.loginForm.touched; else invalidPassword"
+                class="hr-light">
+        </StackLayout>
+        <ng-template #invalidPassword>
+            <StackLayout order="3"
+                         class="hr-invalid"></StackLayout>
+            <Label order="4"
+                   class="invalid"
+                   *ngIf="loginForm.get('password').hasError('required')"
+                   text="Password is required!"></Label>
+            <Label order="4"
+                   class="invalid"
+                   *ngIf="loginForm.get('password').hasError('minlength')"
+                   text="Password must be at least 6 characters long"></Label>
+        </ng-template>
+    </FlexboxLayout>
+    <StackLayout orientation="horizontal">
+        <Button class="btn btn-outline btn-primary"
+                [text]="isLoggingIn ? LOG_IN : REGISTER"
+                [isEnabled]="loginForm.valid && !isFormLoading"
+                (tap)="onSubmit()"
+        ></Button>
+        <Button class="btn btn-outline btn-primary"
+                [text]="isLoggingIn ? ' Switch to ' + REGISTER + ' ' : ' Switch to ' + LOG_IN + ' '"
+                (tap)="switchForm()"
+        >
+        </Button>
+    </StackLayout>
+</FlexboxLayout>

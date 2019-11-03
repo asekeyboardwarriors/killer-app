@@ -43,7 +43,7 @@
     ],
     "unified-signatures": true,
     "prefer-function-over-method": [
-      true,
+      false,
       "allow-public",
       "allow-protected"
     ],
@@ -71,7 +71,7 @@
     "no-parameter-reassignment": true,
     "no-void-expression": true,
     "invalid-void": [
-      true,
+      false,
       {
         "allow-generics": [
           "Promise",
@@ -331,7 +331,7 @@
     "class-name": true,
     "interface-name": [
       true,
-      "never-prefix"
+      "always-prefix"
     ],
     "variable-name": [
       true,
@@ -343,6 +343,7 @@
     "comment-type": [
       true,
       "singleline",
+      "multiline",
       "doc"
     ],
     "comment-format": [

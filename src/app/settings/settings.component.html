@@ -1,21 +1,54 @@
-<ActionBar class="action-bar">
-    <!-- 
-    Use the NavigationButton as a side-drawer button in Android
-    because ActionItems are shown on the right side of the ActionBar
-    -->
-    <NavigationButton ios:visibility="collapsed" icon="res://menu" (tap)="onDrawerButtonTap()"></NavigationButton>
-    <!-- 
-    Use the ActionItem for IOS with position set to left. Using the
-    NavigationButton as a side-drawer button in iOS is not possible,
-    because its function is to always navigate back in the application.
-    -->
-    <ActionItem icon="res://navigation/menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
-        ios.position="left">
-    </ActionItem>
-    <Label class="action-bar-title" text="Settings"></Label>
-</ActionBar>
+<DomActionBar [showMenu]="true"
+              [title]="'Settings'"
+              [isAppLoading]="isLoading"
+>
 
-<GridLayout class="page page-content">
-    <Label class="page-icon fa" text="&#xf013;"></Label>
-    <Label class="page-placeholder" text="<!-- Page content goes here -->"></Label>
-</GridLayout>
+</DomActionBar>
+<FlexboxLayout
+        class="page page-content p-l-10 m-t-10 form"
+        flexWrap="wrap"
+        alignItems="flex-start"
+        flexDirection="row">
+    <FlexboxLayout
+            height="20%"
+            width="100%"
+            flexWrap="wrap"
+            flexDirection="row"
+            alignItems="center"
+    >
+        <Label class="fa"
+               width="5%"
+               text="&#xf017;">
+        </Label>
+        <Label width="35%"
+               class="body m-r-10"
+               text=" Update frequency (s)"></Label>
+        <TextField
+            #frequency
+            class="input input-border"
+            [editable]="isEditing"
+            [text]="userSettings.locationUpdateFrequency / 1000"
+            height="45%"
+            width="20%"></TextField>
+        <Label
+                width="10%"
+                *ngIf="!isEditing"
+                class="fa m-l-30"
+                text="&#xf044;"
+                (tap)="canEdit()"
+        ></Label>
+        <Label
+                width="10%"
+                class="fa m-l-30"
+                text="&#xf00c;"
+                (tap)="save(frequency)"
+        ></Label>
+        <Label
+                width="10%"
+                *ngIf="isEditing"
+                class="fa m-l-30"
+                text="&#xf00d;"
+                (tap)="cancel()"
+        ></Label>
+    </FlexboxLayout>
+</FlexboxLayout>
