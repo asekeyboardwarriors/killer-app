@@ -1,0 +1,7 @@
+<ActivityIndicator *ngIf="isLoading else component" [busy]="isLoading" class="btn btn-outline">
+</ActivityIndicator>
+<ng-template #component>
+    <ng-content>
+
+    </ng-content>
+</ng-template>

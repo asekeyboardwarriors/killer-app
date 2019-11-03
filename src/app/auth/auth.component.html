@@ -85,11 +85,13 @@
         </ng-template>
     </FlexboxLayout>
     <StackLayout orientation="horizontal">
-        <Button class="btn btn-outline btn-primary"
-                [text]="isLoggingIn ? LOG_IN : REGISTER"
-                [isEnabled]="loginForm.valid && !isFormLoading"
-                (tap)="onSubmit()"
-        ></Button>
+        <Block [isLoading]="isFormLoading">
+            <Button class="btn btn-outline btn-primary"
+                    [text]="isLoggingIn ? LOG_IN : REGISTER"
+                    [isEnabled]="loginForm.valid && !isFormLoading"
+                    (tap)="onSubmit()"
+            ></Button>
+        </Block>
         <Button class="btn btn-outline btn-primary"
                 [text]="isLoggingIn ? ' Switch to ' + REGISTER + ' ' : ' Switch to ' + LOG_IN + ' '"
                 (tap)="switchForm()"
