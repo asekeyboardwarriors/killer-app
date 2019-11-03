@@ -33,7 +33,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         // Instantiate geoLoc object for map to initalize
         this.logger.multiLog(this, 'Home component -- Init');
-        this.locationService.subscribeToLocation();
         this.location = this.locationService.location;
         this._updateServerLocationOfUser(this.userSettings.userPreferences.locationUpdateFrequency);
     }
@@ -50,11 +49,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     onMapReady(args): void {
+        console.log(this.location);
+        console.log(this.locationService.location);
         this._map = args.map;
         args.map.setCenter({
             lng: this.locationService.location.longitude,
             lat: this.locationService.location.latitude
         });
+        args.map.showUserLocation = true;
         const firstMarker = {
             id: 2, // can be user in 'removeMarkers()'
             lat: this.location.latitude, // mandatory
@@ -63,9 +65,13 @@ export class HomeComponent implements OnInit, OnDestroy {
             subtitle: 'Infamous subtitle!',
             // icon: 'res://cool_marker', // preferred way, otherwise use:
             iconPath: 'res/markers/home_marker.png',
-            selected: true, // makes the callout show immediately when the marker is added (note: only 1 marker can be selected at a time)
+            selected: true   // makes the callout show immediately when the marker is added (note: only 1 marker can be selected at a time)
         } as MapboxMarker;
         args.map.addMarkers([firstMarker]);
+        args.map.trackUser({
+            mode: 'FOLLOW_WITH_HEADING', // "NONE" | "FOLLOW" | "FOLLOW_WITH_HEADING" | "FOLLOW_WITH_COURSE"
+            animated: true
+        });
     }
 
     /**

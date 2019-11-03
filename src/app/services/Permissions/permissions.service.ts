@@ -27,6 +27,7 @@ export class PermissionsService {
             permissions.requestPermissions(perms, 'I need these permissions to work!')
                 .then(() => {
                     console.log('Woo Hoo, I have the power!');
+                    this.locServices.subscribeToLocation();
                 })
                 .catch(() => {
                     console.log('Uh oh, no permissions - plan B time!');
