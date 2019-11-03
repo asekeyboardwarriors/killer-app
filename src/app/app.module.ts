@@ -1,5 +1,4 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { registerElement } from 'nativescript-angular/element-registry';
 import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
 import { NativeScriptUISideDrawerModule } from 'nativescript-ui-sidedrawer/angular';
 import { SharedModule } from '~/app/shared/shared.module';
@@ -7,8 +6,6 @@ import { SharedModule } from '~/app/shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-registerElement('LinearProgressBar',
-    () => require('nativescript-linearprogressbar').Linearprogressbar);
 
 @NgModule({
     bootstrap: [
