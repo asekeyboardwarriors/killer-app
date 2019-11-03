@@ -52,12 +52,15 @@
                 text="&#xf044;"
                 (tap)="canEdit()"
         ></Label>
+        <!-- tick btn -->
         <Label
                 width="10%"
+                *ngIf="isEditing"
                 class="fa m-l-30"
                 text="&#xf00c;"
                 (tap)="save(frequency)"
         ></Label>
+        <!-- cancel btn -->
         <Label
                 width="10%"
                 *ngIf="isEditing"
@@ -65,5 +68,6 @@
                 text="&#xf00d;"
                 (tap)="cancel()"
         ></Label>
+
     </FlexboxLayout>
 </FlexboxLayout>
