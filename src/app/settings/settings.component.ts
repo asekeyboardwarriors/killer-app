@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import * as app from 'tns-core-modules/application';
 import { TextField } from 'ui/text-field';
