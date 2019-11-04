@@ -56,4 +56,5 @@ export class SettingsComponent implements OnInit {
         textField.text = (this.userSettings.locationUpdateFrequency / 1000).toString();
         textField.dismissSoftInput();
     }
+
 }
