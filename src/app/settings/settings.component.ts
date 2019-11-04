@@ -12,10 +12,10 @@ import { UserSettingsService } from '~/app/services/User/user-settings.service';
 })
 export class SettingsComponent implements OnInit {
     @ViewChild('frequency', {static: false}) freqText: ElementRef;
+
     userSettings: IUserPreferences;
     isEditing = false;
     isLoading = false;
-    private readonly IOS_KEYBOARDTYPE_NUMBERPAD: number = 4;
 
     constructor(private userPreferences: UserSettingsService,
                 private userAlerts: UserAlertsService) {
@@ -25,7 +25,6 @@ export class SettingsComponent implements OnInit {
     ngOnInit(): void {
         // Init your component properties here.
         this.userSettings = this.userPreferences.userPreferences;
-
     }
 
     onDrawerButtonTap(): void {
@@ -47,7 +46,6 @@ export class SettingsComponent implements OnInit {
                 this.isLoading = false;
                 this.userSettings.locationUpdateFrequency = Number(textField.text) * 1000;
                 this.cancel();
-                textField.dismissSoftInput();
             });
         }
     }
@@ -56,5 +54,6 @@ export class SettingsComponent implements OnInit {
         this.canEdit();
         const textField = this.freqText.nativeElement as TextField;
         textField.text = (this.userSettings.locationUpdateFrequency / 1000).toString();
+        textField.dismissSoftInput();
     }
 }
