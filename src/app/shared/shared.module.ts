@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { NativeScriptRouterModule } from 'nativescript-angular';
@@ -6,12 +7,14 @@ import { DomActionBarComponent } from '~/app/shared/components/dom-action-bar/do
 import { BlockComponent } from './components/block/block.component';
 
 @NgModule({
-  declarations: [DomActionBarComponent, BlockComponent],
-  imports: [
-    NativeScriptCommonModule,
-    NativeScriptRouterModule
-  ],
+    declarations: [DomActionBarComponent, BlockComponent],
+    imports: [
+        NativeScriptCommonModule,
+        NativeScriptRouterModule,
+        CommonModule
+    ],
     exports: [
+        CommonModule,
         HttpClientModule,
         NativeScriptRouterModule,
         NativeScriptCommonModule,
@@ -19,4 +22,5 @@ import { BlockComponent } from './components/block/block.component';
         BlockComponent
     ]
 })
-export class SharedModule { }
+export class SharedModule {
+}
