@@ -5,6 +5,7 @@ import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from 'nat
 import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import * as app from 'tns-core-modules/application';
+import { UserModel } from '~/app/models/User/user-backend-model';
 import { UserLogin } from '~/app/models/User/user-login';
 import { AuthService } from '~/app/services/User/auth.service';
 import { LocationService } from '~/app/services/Location/location.service';
@@ -16,7 +17,7 @@ import { PermissionsService } from '~/app/services/Permissions/permissions.servi
     templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
-    user: Subject<UserLogin>;
+    user: Subject<UserModel>;
 
     private _activatedUrl: string;
     private _sideDrawerTransition: DrawerTransitionBase;

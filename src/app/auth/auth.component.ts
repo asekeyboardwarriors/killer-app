@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular';
+import { DeviceModel } from '~/app/models/Device/device-backend-model';
+import { UserModel } from '~/app/models/User/user-backend-model';
 import { UserLogin } from '~/app/models/User/user-login';
 import { LoggingService } from '~/app/services/Log/logging.service';
 import { AuthService } from '~/app/services/User/auth.service';
 import { UserAlertsService } from '~/app/services/User/user-alerts.service';
+import { device } from 'tns-core-modules/platform';
 
 @Component({
     selector: 'Auth',
@@ -19,6 +22,7 @@ export class AuthComponent implements OnInit {
     isFormLoading = false;
     hidden = true;
 
+    private _user: UserModel;
     private readonly REGISTER = 'Register';
     private readonly LOG_IN = 'Log in';
 
@@ -27,7 +31,8 @@ export class AuthComponent implements OnInit {
                 private authService: AuthService,
                 private userAlerts: UserAlertsService,
                 private router: RouterExtensions) {
-        this.userLogin = new UserLogin();
+
+        this._user = new UserModel(device.region, '', undefined, undefined, undefined);
     }
 
     ngOnInit(): void {
@@ -38,12 +43,15 @@ export class AuthComponent implements OnInit {
         this.loginForm.valueChanges.subscribe((form: UserLogin) => {
             this.userLogin = form;
         });
+
     }
 
     onSubmit(): void {
         this.isFormLoading = true;
+        this._user.device = new DeviceModel(device.uuid, '', device.deviceType, device.region);
+        this._user.location = [];
         if (!this.isLoggingIn) {
-            this.authService.register(this.userLogin)
+            this.authService.register(this._user)
                 .then((userResponse: any) => {
                         this.logger.multiLog(userResponse);
                         this.isFormLoading = false;
@@ -54,7 +62,7 @@ export class AuthComponent implements OnInit {
                 this.isFormLoading = false;
             });
         } else {
-            this.authService.login(this.userLogin)
+            this.authService.login(this._user)
                 .then(() => {
                         this.isFormLoading = false;
                         this.router.navigate(['/home'], {clearHistory: true});
