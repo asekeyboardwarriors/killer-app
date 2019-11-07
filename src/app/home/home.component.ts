@@ -83,6 +83,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this._serverInformSub = interval(howOften).subscribe(next => {
             this.locationService
                 .sendLocationToServer(LocationFailureHandling.SILENT_RETRY, this.locationService.location)
+                .then(console.log)
                 .catch(console.log);
         });
     }

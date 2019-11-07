@@ -1,13 +1,17 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import * as geolocation from 'nativescript-geolocation';
 import { Location } from 'nativescript-geolocation';
-import { of, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators';
 import { Accuracy } from 'tns-core-modules/ui/enums';
 import { LocationFailureHandling } from '~/app/models/location-failure-handling';
+import { LocationModel } from '~/app/models/Location/location-backend-model';
 import { LocationTransferModel } from '~/app/models/Location/location-transfer-model';
+import { UserModel } from '~/app/models/User/user-backend-model';
 import { LoggingService } from '~/app/services/Log/logging.service';
+import { AuthService } from '~/app/services/User/auth.service';
 import { UserAlertsService } from '~/app/services/User/user-alerts.service';
 
 @Injectable({
@@ -17,9 +21,12 @@ export class LocationService {
     private _location: Location;
     private _cache: Array<LocationTransferModel> = [];
     private _locSub: number;
+    private readonly URI = 'https://ariasep.herokuapp.com/';
 
     constructor(private logger: LoggingService,
-                private errorReporter: UserAlertsService) {
+                private errorReporter: UserAlertsService,
+                private http: HttpClient,
+                private auth: AuthService) {
         this._location = new Location();
     }
 
@@ -29,7 +36,7 @@ export class LocationService {
      * @param location The location to send to the server
      */
     sendLocationToServer(failureHandling: LocationFailureHandling = LocationFailureHandling.RETRY_WITH_ERROR,
-                         location?: LocationTransferModel | Location): Promise<boolean> {
+                         location?: LocationTransferModel | Location): Promise<UserModel> {
         // Mock send until server ready
 
         // What happens if home is not reachable?
@@ -37,35 +44,38 @@ export class LocationService {
         // and then it should attempt to again reach the server
         this.logger.multiLog('Sending location to server....', this.location);
 
-        const errValue = Math.random();
-        this.logger.simpleLog(errValue);
+        const user = {
+            ...this.auth.cachedUser,
+            location: [
+                this._getAsSimpleLocation(location)
+            ]
+        };
+        const handleIfError = this.http.patch<UserModel>(this.URI + this.auth.cachedUser.id, user)
+            .pipe(catchError(err => {
+                this.logger.simpleLog('In Error block');
+                // If error check failure handling and act accordingly
+                switch (failureHandling) {
+                    case LocationFailureHandling.IGNORE_WITH_ERROR:
+                        this.errorReporter.showToUser(err);
+                        break;
+                    case LocationFailureHandling.SILENT_IGNORE:
+                        this.logger.simpleLog(err);
+                        break;
+                    case LocationFailureHandling.RETRY_WITH_ERROR:
+                        this.errorReporter.showToUser(err);
+                        this._retryAfterTimeout(location);
+                        // Retry
+                        break;
+                    case LocationFailureHandling.SILENT_RETRY:
+                        // Retry
+                        this._retryAfterTimeout(location);
+                        break;
+                    default:
+                    // ignore
+                }
 
-        const httpMock = errValue >= 0.5 ? throwError('Failed to reach server') : of(true);
-        const handleIfError = httpMock.pipe(catchError(err => {
-            this.logger.simpleLog('In Error block');
-            // If error check failure handling and act accordingly
-            switch (failureHandling) {
-                case LocationFailureHandling.IGNORE_WITH_ERROR:
-                    this.errorReporter.showToUser(err);
-                    break;
-                case LocationFailureHandling.SILENT_IGNORE:
-                    this.logger.simpleLog(err);
-                    break;
-                case LocationFailureHandling.RETRY_WITH_ERROR:
-                    this.errorReporter.showToUser(err);
-                    this._retryAfterTimeout(location);
-                    // Retry
-                    break;
-                case LocationFailureHandling.SILENT_RETRY:
-                    // Retry
-                    this._retryAfterTimeout(location);
-                    break;
-                default:
-                // ignore
-            }
-
-            return throwError(err);
-        }));
+                return throwError(err);
+            }));
 
         return handleIfError.toPromise();
     }
@@ -126,15 +136,30 @@ export class LocationService {
             const locToRetry = this._cache.find((loc: LocationTransferModel) =>
                 loc.id === id);
             this.logger.simpleLog(`Retrying with item id ${id}`);
-            this.sendLocationToServer(LocationFailureHandling.SILENT_RETRY, locToRetry).then((success: boolean) => {
-                if (success) {
-                    this._cache = this._cache.filter((loc: LocationTransferModel) => {
-                        return loc.id !== id;
-                    });
+            this.sendLocationToServer(LocationFailureHandling.SILENT_RETRY, locToRetry).then((user: UserModel) => {
+                if (user) {
+                    this._cache = this._cache.filter((loc: LocationTransferModel) =>
+                        loc.id !== id);
                     this.logger.multiLog(this._cache);
                 }
             });
         }, timeout);
+    }
+
+    private _getAsSimpleLocation(location: Location | LocationTransferModel): LocationModel {
+        if (location instanceof Location) {
+            return {
+                timestamp: +moment().valueOf(),
+                latitude: location.latitude.toString(),
+                longitude: location.longitude.toString()
+            };
+        }
+
+        return {
+            longitude: location.location.longitude.toString(),
+            latitude: location.location.longitude.toString(),
+            timestamp: +moment().valueOf()
+        };
     }
 
     get location(): Location {
