@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {UserModel} from '../../Models/user/user.model';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {ToastController} from '@ionic/angular';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { ToastController } from '@ionic/angular';
+import { UserModel } from '../../Models/user/user.model';
 
 @Injectable({
     providedIn: 'root'

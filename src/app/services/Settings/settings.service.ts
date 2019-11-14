@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {FileReadResult, FilesystemDirectory, FilesystemEncoding, FileWriteResult, Plugins} from '@capacitor/core';
-import {SettingsModel} from '../../settings/settings.model';
-import {ToastController} from '@ionic/angular';
+import { Injectable } from '@angular/core';
+import { FileReadResult, FilesystemDirectory, FilesystemEncoding, FileWriteResult, Plugins } from '@capacitor/core';
+import { SettingsModel } from '../../settings/settings.model';
+import { ToastController } from '@ionic/angular';
 
 const {Filesystem} = Plugins;
 
@@ -14,17 +14,20 @@ export class SettingsService {
 
     constructor(private _toastController: ToastController) {
         // Check if file exists
+    }
+
+    askPermissionsAndCreateDefault(): void {
         this._readSettingsIfAny().then((exists: boolean) => {
             if (!exists) {
                 this._createDefaultSettings()
                     .catch(() => {
-                    this._toastController.create({
-                        message: 'Failed to create user settings!',
-                        duration: 2500
-                    }).then(toast => {
-                        toast.present();
+                        this._toastController.create({
+                            message: 'Failed to create user settings!',
+                            duration: 2500
+                        }).then(toast => {
+                            toast.present();
+                        });
                     });
-                });
             }
         });
     }
@@ -93,6 +96,7 @@ export class SettingsService {
                 encoding: FilesystemEncoding.UTF8
             });
             this._settings = JSON.parse(contents.data) as SettingsModel;
+
             return true;
         } catch (e) {
             // File doesnt exist
@@ -100,7 +104,7 @@ export class SettingsService {
         }
     }
 
-    get settings() {
+    get settings(): SettingsModel {
         return this._settings;
     }
 }

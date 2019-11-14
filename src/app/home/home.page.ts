@@ -35,6 +35,7 @@ export class HomePage {
 
     ionViewWillEnter(): void {
         // Subscribe to user location as defined in settings
+        console.log('Ion Enter');
         this.isLoading = true;
         this._subs = this.userLoc.getCurrentLocationPerTime(this.userSettings.settings.locInterval)
             .subscribe((location: GeolocationPosition) => {
@@ -47,13 +48,18 @@ export class HomePage {
         this._subs.unsubscribe();
     }
 
-    async onMapReady(map: Map): Promise<void> {
+    onMapReady(map: Map): void {
         this.map = map;
-        const geoObject = await this.userLoc.currentLocation();
-        this.map.panTo(latLng(geoObject.coords.latitude, geoObject.coords.longitude));
-        // This is needed here as map will not render correctly without it
-        setTimeout(() => {
-            map.invalidateSize();
-        }, 1000);
+        this.userLoc.currentLocation()
+            .then((geoObject: GeolocationPosition) => {
+                this.map.panTo(latLng(geoObject.coords.latitude, geoObject.coords.longitude));
+                // This is needed here as map will not render correctly without it
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 1000);
+            }).catch(e => {
+            console.log(`Failed with error`);
+            console.log(e);
+        });
     }
 }

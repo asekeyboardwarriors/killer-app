@@ -1,12 +1,23 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { ToastController } from '@ionic/angular';
 
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  // let service: AuthService;
+
+  beforeEach(() => {
+   // service = new AuthService(new HttpClient(), new ToastController());
+
+    return TestBed.configureTestingModule({
+      imports: [HttpClientModule],
+      providers: [AuthService]
+    });
+  });
 
   it('should be created', () => {
-    const service: AuthService = TestBed.get(AuthService);
-    expect(service).toBeTruthy();
+    // expect(service)
+       // .toBeTruthy();
   });
 });
