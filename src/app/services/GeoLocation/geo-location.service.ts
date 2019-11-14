@@ -34,7 +34,12 @@ export class GeoLocationService {
         this._subs.unsubscribe();
     }
 
+    /**
+     * Gets the user location once can be used to ask permissions aswell
+     */
     currentLocation(): Promise<GeolocationPosition> {
-        return Geolocation.getCurrentPosition();
+        return Geolocation.getCurrentPosition({
+            enableHighAccuracy: true
+        });
     }
 }
