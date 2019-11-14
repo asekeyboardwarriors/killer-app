@@ -1,0 +1,7 @@
+{
+  "name": "domKillerApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

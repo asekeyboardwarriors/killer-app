@@ -1,0 +1,36 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>{{titleText}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="loginForm" fxFlex="row wrap" style="height: 100%" fxLayoutAlign="center center">
+        <div fxFlex="80" fxLayout="column wrap">
+            <mat-form-field appearance="outline" fxFlex="50">
+                <mat-label>Email</mat-label>
+                <input autocomplete="email" formControlName="email" required matInput value="">
+                <mat-error *ngIf="email.hasError('required')">Email is required!</mat-error>
+                <mat-error *ngIf="email.hasError('email')">Please enter a valid email!</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex="50">
+                <mat-label>Password</mat-label>
+                <input autocomplete="password" formControlName="password" [type]="hide ? 'password' : 'text'" required
+                       matInput
+                       value="">
+                <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                        [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="password.hasError('required')">Password is required!</mat-error>
+                <mat-error *ngIf="password.hasError('minLength')">Password must be at least 6 characters!</mat-error>
+            </mat-form-field>
+            <div fxFlex="100"></div>
+            <div fxFlex="100" fxLayout="row wrap" fxLayoutAlign="space-between center">
+                <ion-button size="default" color="primary" fxFlex="40" (click)="onLogin()">Log in</ion-button>
+                <ion-button size="default" color="primary" fxFlex="40" (click)="onRegister()">Register</ion-button>
+            </div>
+        </div>
+    </form>
+</ion-content>

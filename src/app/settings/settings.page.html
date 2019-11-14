@@ -1,0 +1,38 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-buttons slot="secondary">
+            <ion-button (click)="onSaveSettings()">
+                <ion-icon slot="icon-only" name="save"></ion-icon>
+            </ion-button>
+            <ion-button (click)="onResetChanges()">
+                <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Your Bookings</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="settingsForm" fxLayout="row wrap" fxLayoutAlign="start center">
+        <div fxFlex="5"></div>
+        <ion-text fxFlex="50">
+            Location reload interval (s)
+        </ion-text>
+        <div fxFlex="20"></div>
+        <mat-form-field [color]="settingsForm.get('locInterval').valid ? 'primary' : 'warn'" class="margin-top-5"
+                        fxFlex="20" appearance="outline">
+            <mat-label>
+                <mat-icon matSuffix>timer</mat-icon>
+            </mat-label>
+            <input formControlName="locInterval" matInput inputmode="numeric" pattern="[0-9]*" type="number"
+                   [value]="settings.locInterval">
+        </mat-form-field>
+        <div fxFlex="100"></div>
+        <div fxFlex="5"></div>
+        <ion-text *ngIf="settingsForm.get('locInterval').invalid" color="danger"
+                  fxFlex="90">{{getFormError('locInterval')}}</ion-text>
+    </form>
+</ion-content>
