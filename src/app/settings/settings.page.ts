@@ -23,10 +23,12 @@ export class SettingsPage implements OnInit {
         console.log(this.userSettings.settings);
         this.settings = this.userSettings.settings;
         this.settingsForm = this._fb.group({
-            locInterval: this._fb.control(this.settings.locInterval, [Validators.required, Validators.minLength(1)])
+            locInterval: this._fb.control(this.settings.locInterval, [Validators.required, Validators.minLength(1)]),
+            distance: this._fb.control(this.settings.distance, [Validators.required, Validators.minLength(1), Validators.maxLength(5)])
         });
         this.settingsForm.valueChanges.subscribe(() => {
             this.settings.locInterval = this.settingsForm.get('locInterval').value;
+            this.settings.distance = this.settingsForm.get('distance').value;
         });
     }
 
