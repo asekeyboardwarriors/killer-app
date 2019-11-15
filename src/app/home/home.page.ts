@@ -8,7 +8,7 @@ import { SettingsService } from '../services/Settings/settings.service';
 @Component({
     selector: 'app-home',
     templateUrl: 'home.page.html',
-    styleUrls: ['home.page.scss'],
+    styleUrls: ['home.page.scss']
 })
 export class HomePage {
     center: LatLng = latLng(46.879966, -121.726909);
@@ -29,7 +29,7 @@ export class HomePage {
                 accessToken: 'pk.eyJ1IjoiYXZhbG90aG9hdGgiLCJhIjoiY2sydWY1OWpvMHptMTNtcHZnbnl0YjB0MCJ9.Ryrcvt-TdL-vUH0SzMp2DQ'
             })],
             zoom: 10,
-            center: this.center,
+            center: this.center
         };
     }
 
@@ -58,7 +58,7 @@ export class HomePage {
                     map.invalidateSize();
                 }, 1000);
             }).catch(e => {
-            console.log(`Failed with error`);
+            console.log('Failed with error');
             console.log(e);
         });
     }

@@ -76,7 +76,7 @@ export class AuthService {
 
     }
 
-    get user() {
+    get user(): UserModel {
         return this._currentUser;
     }
 }
