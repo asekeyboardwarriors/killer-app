@@ -35,10 +35,9 @@
         <div fxFlex="5"></div>
         <ion-text *ngIf="settingsForm.get('locInterval').invalid" color="danger"
                   fxFlex="90">{{getFormError('locInterval')}}</ion-text>
-    </form>
 
-    <!--Display Distance UI-->
-    <form [formGroup]="settingsForm" fxLayout="row wrap" fxLayoutAlign="start center">
+        <!--Display Distance UI-->
+        <div fxFlex="100"></div>
         <div fxFlex="5"></div>
         <ion-text fxFlex="50">
             Display Distance (km)
