@@ -23,10 +23,10 @@ export class SettingsPage implements OnInit {
         console.log(this.userSettings.settings);
         this.settings = this.userSettings.settings;
         this.settingsForm = this._fb.group({
-            locInterval: this._fb.control(this.settings.locInterval, [Validators.required, Validators.minLength(1),
+            locInterval: this._fb.control(this.settings.locInterval, [Validators.required,
                                                                       Validators.maxLength(5)]),
             distance: this._fb.control(this.settings.distance, [Validators.required,
-                                                                Validators.minLength(1), Validators.maxLength(3),
+                                                                Validators.maxLength(3),
                                                                 Validators.min(1), Validators.max(5)])
         });
         this.settingsForm.valueChanges.subscribe(() => {
