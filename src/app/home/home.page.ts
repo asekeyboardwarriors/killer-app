@@ -1,21 +1,25 @@
 import { Component } from '@angular/core';
+import { LeafletControlLayersConfig } from '@asymmetrik/ngx-leaflet';
 import { GeolocationPosition } from '@capacitor/core';
-import { LatLng, latLng, Layer, LayerGroup, Map, MapOptions, tileLayer } from 'leaflet';
+import { circle, LatLng, latLng, Layer, LayerGroup, Map, MapOptions, polygon, tileLayer } from 'leaflet';
 import { Subscription } from 'rxjs';
 import { GeoLocationService } from '../services/GeoLocation/geo-location.service';
 import { SettingsService } from '../services/Settings/settings.service';
+
 
 @Component({
     selector: 'app-home',
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss']
 })
+
 export class HomePage {
     center: LatLng = latLng(46.879966, -121.726909);
     options: MapOptions;
     mapLayers: LayerGroup = new LayerGroup<Layer>();
     isLoading = false;
     map: Map;
+    layersControl: LeafletControlLayersConfig;
 
     private _subs: Subscription = new Subscription();
 
@@ -31,6 +35,14 @@ export class HomePage {
             zoom: 10,
             center: this.center
         };
+        this.layersControl = {
+            baseLayers: {},
+            overlays: {
+                'Big Circle': circle([ 46.95, -122 ], { radius: 5000 }),
+                'Big Square': polygon([[ 46.8, -121.55 ], [ 46.9, -121.55 ], [ 46.9, -121.7 ], [ 46.8, -121.7 ]])
+            }
+        }
+
     }
 
     ionViewWillEnter(): void {
