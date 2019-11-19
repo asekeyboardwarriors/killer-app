@@ -16,6 +16,7 @@
 </ion-header>
 
 <ion-content>
+    <!--Location Reload Interval UI -->
     <form [formGroup]="settingsForm" fxLayout="row wrap" fxLayoutAlign="start center">
         <div fxFlex="5"></div>
         <ion-text fxFlex="50">
@@ -34,5 +35,25 @@
         <div fxFlex="5"></div>
         <ion-text *ngIf="settingsForm.get('locInterval').invalid" color="danger"
                   fxFlex="90">{{getFormError('locInterval')}}</ion-text>
+
+        <!--Display Distance UI-->
+        <div fxFlex="100"></div>
+        <div fxFlex="5"></div>
+        <ion-text fxFlex="50">
+            Display Distance (km)
+        </ion-text>
+        <div fxFlex="20"></div>
+        <mat-form-field [color]="settingsForm.get('distance').valid ? 'primary' : 'warn'" class="margin-top-5"
+                        fxFlex="20" appearance="outline">
+            <mat-label>
+                <mat-icon matSuffix>straighten</mat-icon>
+            </mat-label>
+            <input formControlName="distance" matInput inputmode="numeric" pattern="[0-9]*" type="number"
+                   [value]="settings.distance">
+        </mat-form-field>
+        <div fxFlex="100"></div>
+        <div fxFlex="5"></div>
+        <ion-text *ngIf="settingsForm.get('distance').invalid" color="danger"
+                  fxFlex="90">{{getFormError('distance')}}</ion-text>
     </form>
 </ion-content>
