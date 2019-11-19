@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { SettingsModel } from './settings.model';
-import { SettingsService } from '../services/Settings/settings.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { SettingsService } from '../services/Settings/settings.service';
+import { SettingsModel } from './settings.model';
 
 @Component({
     selector: 'app-settings',
     templateUrl: './settings.page.html',
-    styleUrls: ['./settings.page.scss'],
+    styleUrls: ['./settings.page.scss']
 })
 export class SettingsPage implements OnInit {
     settings: SettingsModel;
@@ -24,9 +24,8 @@ export class SettingsPage implements OnInit {
         this.settings = this.userSettings.settings;
         this.settingsForm = this._fb.group({
             locInterval: this._fb.control(this.settings.locInterval, [Validators.required,
-                                                                      Validators.maxLength(5)]),
+                                                                      Validators.min(1)]),
             distance: this._fb.control(this.settings.distance, [Validators.required,
-                                                                Validators.maxLength(3),
                                                                 Validators.min(1), Validators.max(5)])
         });
         this.settingsForm.valueChanges.subscribe(() => {
