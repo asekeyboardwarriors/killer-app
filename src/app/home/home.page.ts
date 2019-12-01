@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { LeafletControlLayersConfig } from '@asymmetrik/ngx-leaflet';
 import { GeolocationPosition } from '@capacitor/core';
-import 'heatmap.js';
-import { circle, icon, LatLng, latLng, Layer, layerGroup, LayerGroup, Map, MapOptions, marker, polygon, tileLayer } from 'leaflet';
+import { DataPoint, HeatmapData, HeatmapOverlayConfiguration } from 'heatmap.js';
+import { icon, LatLng, latLng, Layer, layerGroup, LayerGroup, Map, MapOptions, marker, tileLayer, TileLayer } from 'leaflet';
 import { Subscription } from 'rxjs';
 import { GeoLocationService } from '../services/GeoLocation/geo-location.service';
 import { SettingsService } from '../services/Settings/settings.service';
@@ -15,13 +15,12 @@ import { SettingsService } from '../services/Settings/settings.service';
 
 export class HomePage {
     center: LatLng = latLng(46.879966, -121.726909);
-    testData;
-    cfg;
+    testData: HeatmapData<DataPoint<string, string, string>>;
+    cfg: HeatmapOverlayConfiguration<string, string, string>;
     heatmapLayer;
-    houses;
-    base;
+    houses: LayerGroup = new LayerGroup<Layer>();
+    base: TileLayer;
     options: MapOptions;
-    mapLayers: LayerGroup = new LayerGroup<Layer>();
     isLoading = false;
     map: Map;
     layersControl: LeafletControlLayersConfig;
@@ -86,14 +85,19 @@ export class HomePage {
             }
         });
         this.testData = {
-            data: [{lat: 50.8408, lng: -0.1728, count: 2}, {lat: 50.838, lng: -0.1, count: 1}, {lat: 50.868, lng: -0.08, count: 2}, {lat: 50.858, lng: -0.11, count: 3}]
+            max: 10,
+            min: 1,
+            data: [{lat: 50.8408, lng: -0.1728, count: 2},
+                   {lat: 50.838, lng: -0.1, count: 1},
+                   {lat: 50.868, lng: -0.08, count: 2},
+                   {lat: 50.858, lng: -0.11, count: 3}]
         };
         this.heatmapLayer = new HeatmapOverlay(this.cfg);
         this.heatmapLayer.setData(this.testData);
         this.layersControl = {
             baseLayers: {},
             overlays: {
-                'Heatmap': this.heatmapLayer,
+                'Heat Map': this.heatmapLayer,
                 'House Icons': this.houses
             }
         };
