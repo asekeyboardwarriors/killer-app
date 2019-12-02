@@ -1,4 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import { async, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { GeolocationPosition } from '@capacitor/core';
+import { interval, of, timer } from 'rxjs';
 import { GeoLocationService } from './geo-location.service';
 
 describe('GeoLocationService', () => {
@@ -12,5 +14,4 @@ describe('GeoLocationService', () => {
         const service: GeoLocationService = TestBed.get(GeoLocationService);
         expect(service).toBeTruthy();
     });
-
 });
