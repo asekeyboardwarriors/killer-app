@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FileReadResult, FilesystemDirectory, FilesystemEncoding, FileWriteResult, Plugins } from '@capacitor/core';
-import { SettingsModel } from '../../settings/settings.model';
 import { ToastController } from '@ionic/angular';
+import { SettingsModel } from '../../settings/settings.model';
 
 const {Filesystem} = Plugins;
 

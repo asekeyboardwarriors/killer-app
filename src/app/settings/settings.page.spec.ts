@@ -24,7 +24,8 @@ describe('SettingsPage', () => {
                 {
                     provide: SettingsService, useValue: {
                         settings: (): SettingsModel => ({
-                            locInterval: 60
+                            locInterval: 60,
+                            distance: 1
                         }),
                         saveSettings: () => Promise.resolve()
                     }
