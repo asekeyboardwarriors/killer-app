@@ -1,5 +1,5 @@
 const fs = require('fs');
-const path = './node_modules/\@types/leaflet';
+const path = 'node_modules/@types/heatmap.js/node_modules';
 
 var deleteFolderRecursive = function(path) {
     if( fs.existsSync(path) ) {
