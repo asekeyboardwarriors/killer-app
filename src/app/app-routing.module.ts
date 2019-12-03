@@ -12,7 +12,8 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
   { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' },
-  { path: 'auth', loadChildren: './auth/auth.module#AuthPageModule' }
+  { path: 'auth', loadChildren: './auth/auth.module#AuthPageModule' },
+  { path: 'properties-in-range', loadChildren: './properties-in-range/properties-in-range.module#PropertiesInRangePageModule' }
 ];
 
 @NgModule({

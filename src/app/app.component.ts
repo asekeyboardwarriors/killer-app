@@ -20,6 +20,11 @@ export class AppComponent {
             title: 'Settings',
             url: '/settings',
             icon: 'settings'
+        },
+        {
+            title: 'Properties',
+            url: '/properties-in-range',
+            icon: 'map'
         }
     ];
 
