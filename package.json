@@ -4,6 +4,7 @@
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
+    "cleanup": "node build-scripts/cleanup.js",
     "android": "ionic capacitor run android",
     "android_live": "ionic capacitor run android -l",
     "iStart": "ionic serve",
