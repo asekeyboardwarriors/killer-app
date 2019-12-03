@@ -46,7 +46,11 @@
                 "input": "src/global.scss"
               }
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/leaflet/dist/leaflet.js",
+              "./node_modules/heatmap.js/build/heatmap.min.js",
+              "./node_modules/heatmap.js/plugins/leaflet-heatmap/leaflet-heatmap.js"
+            ]
           },
           "configurations": {
             "production": {
