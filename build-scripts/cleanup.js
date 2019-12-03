@@ -1,3 +1,5 @@
 const fs = require('fs');
-
-fs.unlinkSync('node_modules/@types/leaflet');
+const path = 'node_modules/@types/leaflet';
+if (fs.existsSync(path)) {
+    fs.unlinkSync(path);
+}
