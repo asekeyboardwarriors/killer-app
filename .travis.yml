@@ -17,6 +17,7 @@ cache:
      - ./node_modules
 
 install:
+  - node build-scripts/cleanup.js
   - npm install
 
 script:
