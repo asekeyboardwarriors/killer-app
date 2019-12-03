@@ -103,7 +103,21 @@ export class HomePage {
         });
     }
 
-    getHeatData: void
+    getHeatData(): void {
+        const myList = [{a: 50.8, b: -0.1, c: 450000}, {a: 50.82, b: -0.12, c: 300000}].map(data => {
+            return {
+                lat: data.a,
+                lng: data.b,
+                count: data.c
+            };
+        });
+
+        this.testData = {
+            max: 1,
+            min: 0,
+            data: []
+        }
+    }
 
 
     getHeatTestData(): void {
@@ -136,6 +150,28 @@ export class HomePage {
                 {lat: 50.868, lng: -0.08, count: 1},
                 {lat: 50.858, lng: -0.11, count: 0.3}]
         };
+    }
+
+    getHouseTypeData(): void {
+        const myList = [{a: 50.8, b: -0.1, c: 450000, d: 'detached'}, {a: 50.82, b: -0.12, c: 300000, d: 'apartment'}].map(data => {
+            return {
+                lat: data.a,
+                lng: data.b,
+                count: data.c,
+                propertyType: data.d
+            };
+        });
+
+        // for word in list:
+        // const list[i][0] = marker([list[i][1], list[i][2]], {
+        //     icon: icon({
+        //         iconSize: [20, 20],
+        //         iconAnchor: [10, 10],
+        //         iconUrl: 'assets/icon/' + list[i][3] + '.png'
+        //     })
+        // }).bindPopup(str(list[i][4]));
+        // }
+        // this.houses = layerGroup([list of all the markers just created]);
     }
 
     getHouseTypeTestData(): void {
