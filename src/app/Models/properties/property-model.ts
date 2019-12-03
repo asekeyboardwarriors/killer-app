@@ -1,4 +1,4 @@
-export class PropertiesModel {
+export class PropertyModel {
     constructor(public id?: string,
                 public price?: number,
                 public date?: string,

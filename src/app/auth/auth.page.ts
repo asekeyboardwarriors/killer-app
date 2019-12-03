@@ -7,6 +7,7 @@ import { delay, first, take } from 'rxjs/operators';
 import { UserModel } from '../Models/user/user.model';
 import { AuthService } from '../services/auth/auth.service';
 import { GeoLocationService } from '../services/GeoLocation/geo-location.service';
+import { PropertiesService } from '../services/properties/properties.service';
 import { SettingsService } from '../services/Settings/settings.service';
 
 @Component({
@@ -25,7 +26,7 @@ export class AuthPage implements OnInit {
                 private _loadingController: LoadingController,
                 private _router: Router,
                 private _geoLoc: GeoLocationService,
-                private _settings: SettingsService
+                private _settings: SettingsService,
     ) {
         this.titleText = 'Log in';
     }

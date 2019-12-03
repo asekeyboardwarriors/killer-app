@@ -1,12 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { GeolocationPosition } from '@capacitor/core';
-import { LatLng, latLng, Layer, LayerGroup, Map, MapOptions, tileLayer } from 'leaflet';
-import { Subscription } from 'rxjs';
-import { PropertiesModel } from '../Models/properties/properties-model';
-import { UserModel } from '../Models/user/user.model';
-import { GeoLocationService } from '../services/GeoLocation/geo-location.service';
-import { SettingsService } from '../services/Settings/settings.service';
 
 export interface PropertyArray {
   price: number;

@@ -52,4 +52,8 @@ describe('SettingsPage', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
+  /*  it('should be able to display different time intervals', () => {
+
+    });*/
 });

@@ -136,7 +136,7 @@
     "no-null-undefined-union": true,
     "no-non-null-assertion": true,
     "array-type": [
-      true,
+      false,
       "generic"
     ],
     "prefer-object-spread": true,
