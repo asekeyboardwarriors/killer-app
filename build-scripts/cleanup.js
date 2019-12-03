@@ -15,6 +15,10 @@ var deleteFolderRecursive = function(path) {
     }
 };
 
+fs.appendFileSync('node_modules/@types/leaflet/index.d.ts', 'export interface ILayer {\n' +
+    '    onAdd(map: Map): void;\n' +
+    '    onRemove(map: Map): void;\n' +
+    '}');
 if (fs.existsSync(path)) {
     deleteFolderRecursive(path);
 }
