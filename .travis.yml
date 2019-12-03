@@ -17,8 +17,9 @@ cache:
      - ./node_modules
 
 install:
-  - node build-scripts/cleanup.js
   - npm install
+  - node build-scripts/cleanup.js
+
 
 script:
   - npm run test -- --watch=false --progress=false --browsers=ChromeHeadlessCI --code-coverage=true
