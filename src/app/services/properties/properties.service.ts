@@ -24,17 +24,31 @@ export class PropertiesService {
     /**
      * Gets all properties in the passed radius
      */
-    getPropertiesInRadius(radius: RadiusModel): Subject<PropertyModel[]> {
-        this._http.get<PropertyModel[]>(this.URI + this.RADIUS).subscribe((properties: PropertyModel[]) => {
-            this._propertiesSubject.next(properties);
-        }, async error => {
-            const toast = await this._toastController.create({
-                message: error.message,
-                duration: 2500,
-                color: 'primary'
+    getPropertiesInRadius(rad: RadiusModel): Subject<PropertyModel[]> {
+        console.log('in radius');
+        console.log(rad);
+        // tslint:disable-next-line:no-parameter-reassignment
+        rad = {
+            ...rad,
+            radius: 5
+        };
+        this._http.post<PropertyModel[]>(this.URI + this.RADIUS, JSON.stringify(rad), {
+            headers:  {
+                'Content-Type': 'application/json'
+            }
+        })
+            .subscribe((properties: PropertyModel[]) => {
+                console.log(properties);
+                console.log('done!!!!');
+                this._propertiesSubject.next(properties);
+            }, async error => {
+                const toast = await this._toastController.create({
+                    message: error.message,
+                    duration: 2500,
+                    color: 'primary'
+                });
+                await toast.present();
             });
-            await toast.present();
-        });
 
         return this._propertiesSubject;
     }
