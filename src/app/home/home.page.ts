@@ -76,13 +76,6 @@ export class HomePage {
         this.houses = layerGroup();
         // this.getHeatTestData();
         // this.getHouseTypeTestData();
-        this.layersControl = {
-            baseLayers: {},
-            overlays: {
-                'Heat Map': this.heatmapLayer,
-                'House Icons': this.houses
-            }
-        };
     }
 
     ionViewWillEnter(): void {
@@ -106,8 +99,14 @@ export class HomePage {
                 // console.log('ion: ', this.allPropertiesInRange);
                 this.getHeatData();
                 this.getHouseTypeData();
-                this.houses.addTo(this.map);
                 this.heatmapLayer.setData(this.testData);
+                this.layersControl = {
+                    baseLayers: {},
+                    overlays: {
+                        'Heat Map': this.heatmapLayer,
+                        'House Icons': this.houses
+                    }
+                };
                 console.log('test: ', this.houses);
             }, async error => {
                 await this._loadingIndicator.dismiss();
