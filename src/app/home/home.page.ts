@@ -122,13 +122,12 @@ export class HomePage {
 
     getHeatData(): void {
 
-        const myList = this.allPropertiesInRange.map(data => {
-            return {
+        const myList = this.allPropertiesInRange.map(data =>
+            ({
                 lat: data.latitude,
                 lng: data.longitude,
                 count: data.price
-            };
-        });
+            }));
 
         this.testData = {
             max: 1,
@@ -139,15 +138,14 @@ export class HomePage {
     }
 
     getHouseTypeData(): void {
-        const myList = this.allPropertiesInRange.map(data => {
-            return {
+        const myList = this.allPropertiesInRange.map(data =>
+            ({
                 id: data.id,
                 lat: data.latitude,
                 lng: data.longitude,
                 price: data.price,
                 housetype: data.housetype
-            };
-        });
+            }));
         this.houses = layerGroup();
         for (let i = 0; i < myList.length; i++) {
             const markerz = marker([myList[i].lat, myList[i].lng], {

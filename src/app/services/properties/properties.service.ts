@@ -25,13 +25,6 @@ export class PropertiesService {
      * Gets all properties in the passed radius
      */
     getPropertiesInRadius(rad: RadiusModel): Subject<PropertyModel[]> {
-        console.log('in radius');
-        console.log(rad);
-        // tslint:disable-next-line:no-parameter-reassignment
-        rad = {
-            ...rad,
-            radius: 5
-        };
         this._http.post<PropertyModel[]>(this.URI + this.RADIUS, JSON.stringify(rad), {
             headers:  {
                 'Content-Type': 'application/json'

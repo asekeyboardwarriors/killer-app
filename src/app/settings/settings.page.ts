@@ -26,7 +26,7 @@ export class SettingsPage implements OnInit {
             locInterval: this._fb.control(this.settings.locInterval, [Validators.required,
                                                                       Validators.min(1)]),
             distance: this._fb.control(this.settings.distance, [Validators.required,
-                                                                Validators.min(1), Validators.max(5)])
+                                                                Validators.min(1), Validators.max(100)])
         });
         this.settingsForm.valueChanges.subscribe(() => {
             this.settings.locInterval = this.settingsForm.get('locInterval').value;
