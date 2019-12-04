@@ -26,7 +26,7 @@ export class AuthPage implements OnInit {
                 private _loadingController: LoadingController,
                 private _router: Router,
                 private _geoLoc: GeoLocationService,
-                private _settings: SettingsService,
+                private _settings: SettingsService
     ) {
         this.titleText = 'Log in';
     }

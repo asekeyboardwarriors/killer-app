@@ -6,8 +6,6 @@ import { DataPoint, HeatmapData, HeatmapOverlayConfiguration } from 'heatmap.js'
 import { icon, LatLng, latLng, Layer, layerGroup, LayerGroup, Map, MapOptions, marker, tileLayer, TileLayer } from 'leaflet';
 import { Subscription } from 'rxjs';
 import { PropertyModel } from '../Models/properties/property-model';
-import { HeatDataModel } from '../Models/propertyData/heatData.model';
-import { HouseTypeDataModel } from '../Models/propertyData/houseTypeData.model';
 import { GeoLocationService } from '../services/GeoLocation/geo-location.service';
 import { PropertiesService } from '../services/properties/properties.service';
 import { SettingsService } from '../services/Settings/settings.service';
@@ -62,9 +60,17 @@ export class HomePage {
             lngField: 'lng',
             valueField: 'count',
             gradient: {
-                0.001: 'white',
-                0.8: 'pink',
-                0.95: 'blue'
+                0.001: '#ffffff',
+                0.1: '#ffe6e6',
+                0.2: '#ffcccc',
+                0.3: '#ffb3b3',
+                0.4: '#ff9999',
+                0.5: '#ff8080',
+                0.6: '#ff6666',
+                0.7: '#ff3333',
+                0.8: '#ff0000',
+                0.9: '#cc0000',
+                1: '#800000'
             }
         });
         this.heatmapLayer = new HeatmapOverlay(this.cfg);
@@ -76,13 +82,6 @@ export class HomePage {
         this.houses = layerGroup();
         // this.getHeatTestData();
         // this.getHouseTypeTestData();
-        this.layersControl = {
-            baseLayers: {},
-            overlays: {
-                'Heat Map': this.heatmapLayer,
-                'House Icons': this.houses
-            }
-        };
     }
 
     ionViewWillEnter(): void {
@@ -106,9 +105,14 @@ export class HomePage {
                 // console.log('ion: ', this.allPropertiesInRange);
                 this.getHeatData();
                 this.getHouseTypeData();
-                this.houses.addTo(this.map);
                 this.heatmapLayer.setData(this.testData);
-                console.log('test: ', this.houses);
+                this.layersControl = {
+                    baseLayers: {},
+                    overlays: {
+                        'Heat Map': this.heatmapLayer,
+                        'House Icons': this.houses
+                    }
+                };
             }, async error => {
                 await this._loadingIndicator.dismiss();
             });
@@ -153,38 +157,6 @@ export class HomePage {
 
     }
 
-    getHeatTestData(): void {
-        // let hTestData: HeatDataModel[] = [] ;
-        //
-        // for (let i=0; i<5000; i++) {
-        //     hTestData.push({
-        //         lat: (Math.random() + 50),
-        //         lng: 0 - Math.random(),
-        //         price: (Math.random() + 1) * 50000
-        //     });
-        // }
-        //
-        // let dataMax = Math.max(...hTestData.map(d => d.price));
-        // hTestData = hTestData.map(data => {
-        //     return {
-        //         ...data,
-        //         count: data.price / dataMax
-        //     };
-        // });
-        // console.log(hTestData);
-        // console.log(dataMax);
-        // this.testData = hTestData;
-
-        this.testData = {
-            max: 1,
-            min: 0,
-            data: [{lat: 50.8408, lng: -0.1728, count: 0.1},
-                   {lat: 50.838, lng: -0.1, count: 0.5},
-                   {lat: 50.868, lng: -0.08, count: 1},
-                   {lat: 50.858, lng: -0.11, count: 0.3}]
-        };
-    }
-
     getHouseTypeData(): void {
         const myList = this.allPropertiesInRange.map(data => {
             return {
@@ -203,20 +175,20 @@ export class HomePage {
                         iconAnchor: [10, 10],
                         iconUrl: 'assets/icon/' + myList[i].housetype + '.png'
                     })
-                }).bindPopup(String(myList[i].price))
+                }).bindPopup(String(myList[i].price));
             this.houses.addLayer(markerz);
         }
-        //const markerList = marker[];
-        // for word in list:
-        // const list[i][0] = marker([list[i][1], list[i][2]], {
-        //     icon: icon({
-        //         iconSize: [20, 20],
-        //         iconAnchor: [10, 10],
-        //         iconUrl: 'assets/icon/' + list[i][3] + '.png'
-        //     })
-        // }).bindPopup(str(list[i][4]));
-        // }
-        // this.houses = layerGroup(markerList);
+    }
+
+    getHeatTestData(): void {
+        this.testData = {
+            max: 1,
+            min: 0,
+            data: [{lat: 50.8408, lng: -0.1728, count: 0.1},
+                   {lat: 50.838, lng: -0.1, count: 0.5},
+                   {lat: 50.868, lng: -0.08, count: 1},
+                   {lat: 50.858, lng: -0.11, count: 0.3}]
+        };
     }
 
     getHouseTypeTestData(): void {
