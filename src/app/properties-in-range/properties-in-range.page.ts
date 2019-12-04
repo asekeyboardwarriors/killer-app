@@ -41,7 +41,7 @@ export class PropertiesInRangePage {
   displayedColumns: Array<string> = ['price', 'date', 'housetype', 'duration', 'address'];
   allPropertiesInRange: PropertyModel[];
 
-  private _sub: Subscription;
+  private _sub: Subscription = new Subscription();
   private _loadingIndicator: HTMLIonLoadingElement;
 
   constructor(private _propertiesService: PropertiesService,
