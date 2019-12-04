@@ -62,9 +62,17 @@ export class HomePage {
             lngField: 'lng',
             valueField: 'count',
             gradient: {
-                0.001: 'white',
-                0.8: 'pink',
-                0.95: 'blue'
+                0.001: '#ffffff',
+                0.1: '#ffe6e6',
+                0.2: '#ffcccc',
+                0.3: '#ffb3b3',
+                0.4: '#ff9999',
+                0.5: '#ff8080',
+                0.6: '#ff6666',
+                0.7: '#ff3333',
+                0.8: '#ff0000',
+                0.9: '#cc0000',
+                1: '#800000'
             }
         });
         this.heatmapLayer = new HeatmapOverlay(this.cfg);
