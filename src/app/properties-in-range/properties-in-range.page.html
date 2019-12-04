@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>Properties in Range</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -12,8 +12,8 @@
        fxLayoutGap="10px"
        fxLayoutGap.xs="0">
 
-    <div fxFlex="50">
-      <table mat-table [dataSource]="propertyArray" class="'mat-elevation-z8">
+    <div fxFlex="100">
+      <table mat-table [dataSource]="allPropertiesInRange" class="'mat-elevation-z8">
 
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef> ID </th>
