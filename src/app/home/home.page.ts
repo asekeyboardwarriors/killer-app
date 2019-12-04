@@ -147,14 +147,14 @@ export class HomePage {
                 housetype: data.housetype
             }));
         this.houses = layerGroup();
-        for (let i = 0; i < myList.length; i++) {
-            const markerz = marker([myList[i].lat, myList[i].lng], {
+        for (const prop of myList) {
+            const markerz = marker([prop.lat, prop.lng], {
                 icon: icon({
                     iconSize: [20, 20],
                     iconAnchor: [10, 10],
-                    iconUrl: 'assets/icon/' + myList[i].housetype + '.png'
+                    iconUrl: `assets/icon/${prop.housetype}.png`
                 })
-            }).bindPopup(String(myList[i].price));
+            }).bindPopup(`Price is: ${prop.price}<br\>House type: ${prop.housetype}`);
             this.houses.addLayer(markerz);
         }
     }
@@ -168,7 +168,7 @@ export class HomePage {
             )
             .subscribe(async (propertiesInRange: PropertyModel[]) => {
                 this.allPropertiesInRange = propertiesInRange;
-                await this._loadingIndicator.dismiss();
+                this._dismissLoaderIfExists();
                 this.getHeatData();
                 this.getHouseTypeData();
                 this.heatmapLayer.setData(this.testData);
@@ -182,5 +182,11 @@ export class HomePage {
             }, async error => {
                 await this._loadingIndicator.dismiss();
             });
+    }
+
+    private _dismissLoaderIfExists(): void {
+        if (this._loadingIndicator) {
+            this._loadingIndicator.dismiss();
+        }
     }
 }

@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { GeolocationPosition } from '@capacitor/core';
 import { IonicModule, LoadingController } from '@ionic/angular';
 import { of, Subject } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { PropertyModel } from '../Models/properties/property-model';
 import { GeoLocationService } from '../services/GeoLocation/geo-location.service';
 import { PropertiesService } from '../services/properties/properties.service';
@@ -16,6 +17,7 @@ describe('HomePage', () => {
     let settingsSpy: jasmine.SpyObj<SettingsService>;
     let propSpy: jasmine.SpyObj<PropertiesService>;
     let mockPosition: GeolocationPosition;
+
     beforeEach(async(() => {
         const mockGeoObj: GeolocationPosition = {
             coords: {
@@ -68,6 +70,7 @@ describe('HomePage', () => {
 
         geoLocationSpy = TestBed.get(GeoLocationService);
         settingsSpy = TestBed.get(SettingsService);
+        spyOn(component, 'onMapReady').and.callThrough();
     });
 
     it('should create', () => {
@@ -79,4 +82,11 @@ describe('HomePage', () => {
         expect(component.map.getCenter().lng).toBe(mockPosition.coords.longitude);
         expect(component.map.getCenter().lat).toBe(mockPosition.coords.latitude);
     });
+
+    it('should have a map ready after a component has fully initialized ( no more than 5s )', async (() => {
+        component.ionViewWillEnter();
+        of(true).pipe(delay(5000)).subscribe(() => {
+           expect(component.onMapReady).toHaveBeenCalled();
+        });
+    }));
 });

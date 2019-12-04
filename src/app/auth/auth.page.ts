@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { Observable, of } from 'rxjs';
-import { delay, first, take } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
 import { UserModel } from '../Models/user/user.model';
 import { AuthService } from '../services/auth/auth.service';
 import { GeoLocationService } from '../services/GeoLocation/geo-location.service';
-import { PropertiesService } from '../services/properties/properties.service';
 import { SettingsService } from '../services/Settings/settings.service';
 
 @Component({
