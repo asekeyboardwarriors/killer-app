@@ -3,7 +3,20 @@ import { LeafletControlLayersConfig } from '@asymmetrik/ngx-leaflet';
 import { GeolocationPosition } from '@capacitor/core';
 import { LoadingController } from '@ionic/angular';
 import { DataPoint, HeatmapData, HeatmapOverlayConfiguration } from 'heatmap.js';
-import { icon, LatLng, latLng, Layer, layerGroup, LayerGroup, Map, MapOptions, marker, tileLayer, TileLayer } from 'leaflet';
+import {
+    icon,
+    LatLng,
+    latLng,
+    Layer,
+    layerGroup,
+    LayerGroup,
+    Map as LeafletMap,
+    MapOptions,
+    Marker,
+    marker,
+    tileLayer,
+    TileLayer
+} from 'leaflet';
 import { Subscription } from 'rxjs';
 import { RadiusModel } from '../Models/geolocation/radius.model';
 import { PropertyModel } from '../Models/properties/property-model';
@@ -27,10 +40,11 @@ export class HomePage {
     base: TileLayer;
     options: MapOptions;
     isLoading = false;
-    map: Map;
+    map: LeafletMap;
     layersControl: LeafletControlLayersConfig;
     allPropertiesInRange: PropertyModel[];
 
+    private propertiesListCoordinatesDisplay = new Map<number, string>();
     private _subs: Subscription = new Subscription();
     private _loadingIndicator: HTMLIonLoadingElement;
 
@@ -104,7 +118,7 @@ export class HomePage {
         this._subs.unsubscribe();
     }
 
-    onMapReady(map: Map): void {
+    onMapReady(map: LeafletMap): void {
         this.map = map;
         this.map.addLayer(this.heatmapLayer);
         this.userLoc.currentLocation()
@@ -147,16 +161,30 @@ export class HomePage {
                 housetype: data.housetype
             }));
         this.houses = layerGroup();
+        const markers: Marker[] = [];
         for (const prop of myList) {
-            const markerz = marker([prop.lat, prop.lng], {
+            let html = this.propertiesListCoordinatesDisplay.get(prop.lng + prop.lat);
+            if (html) {
+                html += `<br />Price is: ${prop.price}<br />House type: ${prop.housetype}<hr/>`;
+                this.propertiesListCoordinatesDisplay.set(prop.lng + prop.lat, html);
+            } else {
+                this.propertiesListCoordinatesDisplay.set(prop.lng + prop.lat, `Price is: ${prop.price}<br />House type: ${prop.housetype}<hr/>`);
+            }
+            const mapMarker = marker([prop.lat, prop.lng], {
                 icon: icon({
                     iconSize: [20, 20],
                     iconAnchor: [10, 10],
                     iconUrl: `assets/icon/${prop.housetype}.png`
                 })
-            }).bindPopup(`Price is: ${prop.price}<br\>House type: ${prop.housetype}`);
-            this.houses.addLayer(markerz);
+            });
+            markers.push(mapMarker);
+            this.houses.addLayer(mapMarker);
         }
+        markers.forEach((value: Marker, index) => {
+            value.bindPopup(this.propertiesListCoordinatesDisplay.get(value.getLatLng().lng + value.getLatLng().lat), {
+                maxHeight: 100
+            });
+        });
     }
 
     private getAllPropertiesInRadius(long: number, lang: number): void {
