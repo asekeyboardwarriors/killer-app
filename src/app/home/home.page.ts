@@ -43,8 +43,6 @@ export class HomePage {
     map: LeafletMap;
     layersControl: LeafletControlLayersConfig;
     allPropertiesInRange: PropertyModel[];
-    gradient: { [key: string]: string };
-    altgradient: { [key: string]: string };
 
     private propertiesListCoordinatesDisplay = new Map<number, string>();
     private _subs: Subscription = new Subscription();
@@ -66,45 +64,6 @@ export class HomePage {
             zoom: 10,
             center: this.center
         };
-        this.gradient = {
-            0.001: '#ffffff',
-            0.1: '#ffe6e6',
-            0.2: '#ffcccc',
-            0.3: '#ffb3b3',
-            0.4: '#ff9999',
-            0.5: '#ff8080',
-            0.6: '#ff6666',
-            0.7: '#ff3333',
-            0.8: '#ff0000',
-            0.9: '#cc0000',
-            1: '#800000'
-        }
-        this.altgradient = {
-            0: 'Navy',
-            0.25: 'Blue',
-            0.5: 'Green',
-            0.75: 'Yellow',
-            1: 'Red'
-        }
-        this.cfg = ({
-            radius: 20,
-            maxOpacity: 0.8,
-            minOpacity: 0,
-            scaleRadius: false,
-            useLocalExtrema: true,
-            blur: 0.5,
-            latField: 'lat',
-            lngField: 'lng',
-            valueField: 'count',
-            gradient: this.altgradient
-        });
-        this.heatmapLayer = new HeatmapOverlay(this.cfg);
-        this.testData = {
-            max: 1,
-            min: 0,
-            data: []
-        };
-        this.houses = layerGroup();
     }
 
     ionViewWillEnter(): void {
@@ -130,6 +89,7 @@ export class HomePage {
 
     onMapReady(map: LeafletMap): void {
         this.map = map;
+        this.configureHeatmap()
         this.map.addLayer(this.heatmapLayer);
         this.userLoc.currentLocation()
             .then((geoObject: GeolocationPosition) => {
@@ -142,6 +102,44 @@ export class HomePage {
             console.log('Failed with error');
             console.log(e);
         });
+    }
+
+    configureHeatmap(): void {
+        const redgradient: { [key: string]: string } = {
+            0.001: '#ffffff',
+            0.1: '#ffe6e6',
+            0.2: '#ffcccc',
+            0.3: '#ffb3b3',
+            0.4: '#ff9999',
+            0.5: '#ff8080',
+            0.6: '#ff6666',
+            0.7: '#ff3333',
+            0.8: '#ff0000',
+            0.9: '#cc0000',
+            1: '#800000'
+        };
+        const altgradient: { [key: string]: string } = {
+            0: 'Navy',
+            0.25: 'Blue',
+            0.5: 'Green',
+            0.75: 'Yellow',
+            1: 'Red'
+        };
+        const localExtrema = true;
+        const gradient = redgradient;
+        this.cfg = ({
+            radius: 20,
+            maxOpacity: 0.8,
+            minOpacity: 0,
+            scaleRadius: false,
+            useLocalExtrema: localExtrema,
+            blur: 0.5,
+            latField: 'lat',
+            lngField: 'lng',
+            valueField: 'count',
+            gradient: altgradient
+        });
+        this.heatmapLayer = new HeatmapOverlay(this.cfg);
     }
 
     getHeatData(): void {
