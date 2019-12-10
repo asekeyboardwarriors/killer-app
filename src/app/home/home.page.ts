@@ -43,6 +43,8 @@ export class HomePage {
     map: LeafletMap;
     layersControl: LeafletControlLayersConfig;
     allPropertiesInRange: PropertyModel[];
+    gradient: { [key: string]: string };
+    altgradient: { [key: string]: string };
 
     private propertiesListCoordinatesDisplay = new Map<number, string>();
     private _subs: Subscription = new Subscription();
@@ -64,6 +66,26 @@ export class HomePage {
             zoom: 10,
             center: this.center
         };
+        this.gradient = {
+            0.001: '#ffffff',
+            0.1: '#ffe6e6',
+            0.2: '#ffcccc',
+            0.3: '#ffb3b3',
+            0.4: '#ff9999',
+            0.5: '#ff8080',
+            0.6: '#ff6666',
+            0.7: '#ff3333',
+            0.8: '#ff0000',
+            0.9: '#cc0000',
+            1: '#800000'
+        }
+        this.altgradient = {
+            0: 'Navy',
+            0.25: 'Blue',
+            0.5: 'Green',
+            0.75: 'Yellow',
+            1: 'Red'
+        }
         this.cfg = ({
             radius: 20,
             maxOpacity: 0.8,
@@ -74,19 +96,7 @@ export class HomePage {
             latField: 'lat',
             lngField: 'lng',
             valueField: 'count',
-            gradient: {
-                0.001: '#ffffff',
-                0.1: '#ffe6e6',
-                0.2: '#ffcccc',
-                0.3: '#ffb3b3',
-                0.4: '#ff9999',
-                0.5: '#ff8080',
-                0.6: '#ff6666',
-                0.7: '#ff3333',
-                0.8: '#ff0000',
-                0.9: '#cc0000',
-                1: '#800000'
-            }
+            gradient: this.altgradient
         });
         this.heatmapLayer = new HeatmapOverlay(this.cfg);
         this.testData = {
@@ -144,11 +154,10 @@ export class HomePage {
             }));
 
         this.testData = {
-            max: 1,
-            min: 0,
+            max: Math.max(...myList.map(s => s.count)),
+            min: Math.min(...myList.map(s => s.count)),
             data: myList
         };
-
     }
 
     getHouseTypeData(): void {
