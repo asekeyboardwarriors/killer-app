@@ -63,7 +63,7 @@
             Heatmap: Local / Global Extrema
         </ion-text>
         <div fxFlex="20"></div>
-        <ion-toggle name="extremaBox"color="primary" (ionChange)="extremaChange()"></ion-toggle>
+        <ion-toggle name="extremaBox" [checked]="settings.localExtrema" color="primary" (ionChange)="extremaChange($event)"></ion-toggle>
         <div fxFlex="100"></div>
         <div fxFlex="5"></div>
 
@@ -74,7 +74,7 @@
             Heatmap: Alternative Colour Palette (Red/Rainbow)
         </ion-text>
         <div fxFlex="20"></div>
-        <ion-toggle name="colBox" color="primary" (ionChange)="colourChange()"></ion-toggle>
+        <ion-toggle name="colBox" [checked] = "settings.gradientBool" color="primary" (ionChange)="colourChange($event)"></ion-toggle>
         <div fxFlex="100"></div>
         <div fxFlex="5"></div>
 

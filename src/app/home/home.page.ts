@@ -213,6 +213,7 @@ export class HomePage {
                 this.getHeatData();
                 this.getHouseTypeData();
                 this.heatmapLayer.setData(this.testData);
+                this.configureHeatmap();
                 this.layersControl = {
                     baseLayers: {},
                     overlays: {
