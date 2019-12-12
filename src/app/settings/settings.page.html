@@ -55,5 +55,28 @@
         <div fxFlex="5"></div>
         <ion-text *ngIf="settingsForm.get('distance').invalid" color="danger"
                   fxFlex="90">{{getFormError('distance')}}</ion-text>
+
+        <!--Heatmap Local/Global switch-->
+        <div fxFlex="100"></div>
+        <div fxFlex="5"></div>
+        <ion-text fxFlex="50">
+            Heatmap: Local / Global Extrema
+        </ion-text>
+        <div fxFlex="20"></div>
+        <ion-toggle name="extremaBox"color="primary" (ionChange)="extremaChange()"></ion-toggle>
+        <div fxFlex="100"></div>
+        <div fxFlex="5"></div>
+
+        <!--Heatmap Colour switch-->
+        <div fxFlex="100"></div>
+        <div fxFlex="5"></div>
+        <ion-text fxFlex="50">
+            Heatmap: Alternative Colour Palette (Red/Rainbow)
+        </ion-text>
+        <div fxFlex="20"></div>
+        <ion-toggle name="colBox" color="primary" (ionChange)="colourChange()"></ion-toggle>
+        <div fxFlex="100"></div>
+        <div fxFlex="5"></div>
+
     </form>
 </ion-content>

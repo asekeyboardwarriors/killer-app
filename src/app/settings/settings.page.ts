@@ -12,6 +12,8 @@ import { SettingsModel } from './settings.model';
 export class SettingsPage implements OnInit {
     settings: SettingsModel;
     settingsForm: FormGroup;
+    colourToggle: boolean = false;
+    extremaToggle: boolean = true;
 
     constructor(private userSettings: SettingsService,
                 private _fb: FormBuilder,
@@ -56,9 +58,30 @@ export class SettingsPage implements OnInit {
     async onSaveSettings(): Promise<void> {
         await this.userSettings.saveSettings(this.settings);
         await this.router.navigateByUrl('/home');
+        this.toggleSave();
     }
 
     onResetChanges(): void {
 
     }
+
+    toggleSave(): void {
+        if (this.extremaToggle !== this.settings.localExtrema) {
+            this.settings.localExtrema = !this.settings.localExtrema;
+        }
+        if (this.colourToggle !== this.settings.gradientBool) {
+            this.settings.gradientBool = !this.settings.gradientBool;
+        }
+        this.colourToggle = this.settings.gradientBool;
+        this.extremaToggle = this.settings.localExtrema;
+    }
+
+    extremaChange(): void {
+        this.extremaToggle = !this.extremaToggle;
+    }
+
+    colourChange(): void {
+        this.colourToggle = !this.colourToggle;
+    }
+
 }

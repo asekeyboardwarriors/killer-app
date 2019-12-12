@@ -80,7 +80,6 @@ export class HomePage {
             this._loadingIndicator = overlay;
             await overlay.present();
         });
-
     }
 
     ionViewWillLeave(): void {
@@ -89,7 +88,7 @@ export class HomePage {
 
     onMapReady(map: LeafletMap): void {
         this.map = map;
-        this.configureHeatmap()
+        this.configureHeatmap();
         this.map.addLayer(this.heatmapLayer);
         this.userLoc.currentLocation()
             .then((geoObject: GeolocationPosition) => {
@@ -125,8 +124,15 @@ export class HomePage {
             0.75: 'Yellow',
             1: 'Red'
         };
-        const localExtrema = true;
-        const gradient = redgradient;
+        const localExtrema = this.userSettings.settings.localExtrema;
+        const gradientBool = this.userSettings.settings.gradientBool;
+        console.log(gradientBool)
+        let grad: { [key: string]: string };
+        if (gradientBool === true) {
+            grad = altgradient;
+        } else {
+            grad = redgradient;
+        }
         this.cfg = ({
             radius: 20,
             maxOpacity: 0.8,
@@ -137,7 +143,7 @@ export class HomePage {
             latField: 'lat',
             lngField: 'lng',
             valueField: 'count',
-            gradient: altgradient
+            gradient: grad
         });
         this.heatmapLayer = new HeatmapOverlay(this.cfg);
     }
@@ -175,7 +181,7 @@ export class HomePage {
                 html += `<br />Price is: ${prop.price}<br />House type: ${prop.housetype}<hr/>`;
                 this.propertiesListCoordinatesDisplay.set(prop.lng + prop.lat, html);
             } else {
-                this.propertiesListCoordinatesDisplay.set(prop.lng + prop.lat, `Price is: ${prop.price}<br />House type: ${prop.housetype}<hr/>`);
+                this.propertiesListCoordinatesDisplay.set(prop.lng + prop.lat, `Date Sold: ${prop.price}<br />Price: £${prop.price}<br />House Type: ${prop.housetype}<hr/>`);
             }
             const mapMarker = marker([prop.lat, prop.lng], {
                 icon: icon({
