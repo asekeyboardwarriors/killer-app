@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { LeafletControlLayersConfig } from '@asymmetrik/ngx-leaflet';
 import { GeolocationPosition } from '@capacitor/core';
 import { LoadingController } from '@ionic/angular';
@@ -36,7 +37,10 @@ export class HomePage {
     testData: HeatmapData<DataPoint<string, string, string>>;
     cfg: HeatmapOverlayConfiguration<string, string, string>;
     heatmapLayer: any;
-    houses: LayerGroup = new LayerGroup<Layer>();
+    flat: LayerGroup = new LayerGroup<Layer>();
+    terraced: LayerGroup = new LayerGroup<Layer>();
+    detached: LayerGroup = new LayerGroup<Layer>();
+    semidetached: LayerGroup = new LayerGroup<Layer>();
     base: TileLayer;
     options: MapOptions;
     isLoading = false;
@@ -51,7 +55,9 @@ export class HomePage {
     constructor(private userLoc: GeoLocationService,
                 private userSettings: SettingsService,
                 private _propertiesService: PropertiesService,
-                private _loader: LoadingController) {
+                private _loader: LoadingController,
+                private domSanitizer: DomSanitizer
+    ) {
 
         this.base = tileLayer('https://api.mapbox.com/styles/v1/avalothoath/{id}/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
             attribution: '',
@@ -165,23 +171,27 @@ export class HomePage {
     }
 
     getHouseTypeData(): void {
-        const myList = this.allPropertiesInRange.map(data =>
+        let myList = this.allPropertiesInRange.map(data =>
             ({
+                date: data.date,
                 id: data.id,
                 lat: data.latitude,
                 lng: data.longitude,
                 price: data.price,
                 housetype: data.housetype
             }));
-        this.houses = layerGroup();
+        this.terraced = layerGroup();
+        this.semidetached = layerGroup();
+        this.detached = layerGroup();
+        this.flat = layerGroup();
         const markers: Marker[] = [];
         for (const prop of myList) {
             let html = this.propertiesListCoordinatesDisplay.get(prop.lng + prop.lat);
             if (html) {
-                html += `<br />Price is: ${prop.price}<br />House type: ${prop.housetype}<hr/>`;
+                html += `<br />Date Sold: ${prop.date},<br />Price: £${prop.price}<br />House type: ${prop.housetype}<hr/>`;
                 this.propertiesListCoordinatesDisplay.set(prop.lng + prop.lat, html);
             } else {
-                this.propertiesListCoordinatesDisplay.set(prop.lng + prop.lat, `Date Sold: ${prop.price}<br />Price: £${prop.price}<br />House Type: ${prop.housetype}<hr/>`);
+                this.propertiesListCoordinatesDisplay.set(prop.lng + prop.lat, `Date Sold: ${prop.date}<br />Price: £${prop.price}<br />House Type: ${prop.housetype}<hr/>`);
             }
             const mapMarker = marker([prop.lat, prop.lng], {
                 icon: icon({
@@ -191,7 +201,24 @@ export class HomePage {
                 })
             });
             markers.push(mapMarker);
-            this.houses.addLayer(mapMarker);
+            switch (prop.housetype) {
+                case 'Detached': {
+                    this.detached.addLayer(mapMarker);
+                    break;
+                }
+                case 'Flat': {
+                    this.flat.addLayer(mapMarker);
+                    break;
+                }
+                case 'Semi-detached': {
+                    this.semidetached.addLayer(mapMarker);
+                    break;
+                }
+                case 'Terraced': {
+                    this.terraced.addLayer(mapMarker);
+                    break;
+                }
+            }
         }
         markers.forEach((value: Marker, index) => {
             value.bindPopup(this.propertiesListCoordinatesDisplay.get(value.getLatLng().lng + value.getLatLng().lat), {
@@ -217,8 +244,10 @@ export class HomePage {
                 this.layersControl = {
                     baseLayers: {},
                     overlays: {
-                        'Heat Map': this.heatmapLayer,
-                        'House Icons': this.houses
+                        'Detached Houses': this.detached,
+                        'Semi-Detached Houses': this.semidetached,
+                        'Flats': this.flat,
+                        'Terraced Houses': this.terraced
                     }
                 };
             }, async error => {

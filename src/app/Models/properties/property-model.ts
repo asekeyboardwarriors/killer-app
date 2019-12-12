@@ -2,7 +2,7 @@ export class PropertyModel {
     constructor(public id?: string,
                 public price?: number,
                 public date?: string,
-                public housetype?: string,
+                public housetype?: 'Detached' | 'Flat' | 'Semi-detached' | 'Terraced' | 'Unknown',
                 public newProperty?: boolean,
                 public duration?: string,
                 public address?: string,
