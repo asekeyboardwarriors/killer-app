@@ -1,5 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { MatSortModule, MatTableModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
@@ -23,7 +24,10 @@ import { MaterialModule } from './shared/material/material.module';
         LeafletModule.forRoot(),
         BrowserAnimationsModule,
         MaterialModule,
-        HttpClientModule
+        HttpClientModule,
+        BrowserModule,
+        MatTableModule,
+        MatSortModule
     ],
     providers: [
         StatusBar,

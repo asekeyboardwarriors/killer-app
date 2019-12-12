@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { PropertyModel } from '../Models/properties/property-model';
@@ -12,18 +12,23 @@ import { SettingsService } from '../services/Settings/settings.service';
     templateUrl: 'properties-in-range.page.html',
     styleUrls: ['properties-in-range.page.scss']
 })
-export class PropertiesInRangePage {
+export class PropertiesInRangePage implements OnInit {
 
     displayedColumns: Array<string> = ['price', 'date', 'housetype', 'duration', 'address'];
-    allPropertiesInRange: MatTableDataSource<PropertyModel>;
+    allPropertiesInRange: MatTableDataSource<PropertyModel> = new MatTableDataSource<PropertyModel>();
 
     private _sub: Subscription = new Subscription();
     private _loadingIndicator: HTMLIonLoadingElement;
+    @ViewChild(MatSort, {static: true}) sort: MatSort;
+    @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
     constructor(private _propertiesService: PropertiesService,
                 private _geo: GeoLocationService,
                 private _settings: SettingsService,
                 private _loader: LoadingController) {
+    }
+
+    ngOnInit(): void {
     }
 
     ionViewWillEnter(): void {
@@ -41,6 +46,9 @@ export class PropertiesInRangePage {
             })
                 .subscribe(async (propertiesInRange: PropertyModel[]) => {
                     this.allPropertiesInRange = new MatTableDataSource<PropertyModel>(propertiesInRange);
+                    this.allPropertiesInRange.paginator = this.paginator;
+                    this.allPropertiesInRange.sort = this.sort;
+
                     await this._loadingIndicator.dismiss();
                 }, async error => {
                     await this._loadingIndicator.dismiss();
@@ -55,12 +63,44 @@ export class PropertiesInRangePage {
     applyFilter(value: string) {
         this.allPropertiesInRange.filter = value.trim().toLowerCase();
         this.allPropertiesInRange.filterPredicate = function(data, filter) {
-            if (filter.includes('$price') && filter.includes('>')) {
-                return data.price > Number(filter.replace('$price >', '').trim());
+            const checkValue = filter.replace(/ /g, '');
+
+            if ((checkValue.includes('$price') && checkValue.includes('>')) && !checkValue.includes('&')) {
+                return data.price > Number(checkValue.replace('$price>', '').trim());
             }
-            if (filter.includes('$price') && filter.includes('<')) {
-                return data.price < Number(filter.replace('$price <', '').trim());
+            if ((checkValue.includes('$price') && checkValue.includes('<')) && !filter.includes('&')) {
+                return data.price < Number(checkValue.replace('$price<', '').trim());
             }
-        }
+            if (checkValue.includes('&')) {
+                const indexOfAnd = checkValue.indexOf('&');
+                let parseStringFirstHalf = checkValue.substr(0, indexOfAnd).replace('&', '');
+                let parseStringSecondHalf = checkValue.substr(indexOfAnd - 1, checkValue.length).replace('&', '');
+
+                // first check if condition is between
+                if (parseStringFirstHalf.includes('$price') && parseStringSecondHalf.includes('$price')) {
+                    // user is doing an in between search
+                    // Get greater than value
+                    let greaterThanValue;
+                    let lessThanValue;
+                    if (parseStringSecondHalf.includes('>')) {
+                        greaterThanValue = Number(parseStringSecondHalf.replace('$price>', '').trim());
+                    } else if (parseStringSecondHalf.includes('<')) {
+                        lessThanValue = Number(parseStringSecondHalf.replace('$price<', '').trim());
+                    }
+                    if (parseStringFirstHalf.includes('>')) {
+                        greaterThanValue = Number(parseStringFirstHalf.replace('$price>', '').trim());
+                    } else if (parseStringFirstHalf.includes('<')) {
+                        lessThanValue = Number(parseStringFirstHalf.replace('$price<', '').trim());
+                    }
+
+                    return (data.price > Number(greaterThanValue) && data.price < Number(lessThanValue));
+                }
+            }
+            return data.housetype.includes(value)
+                || data.price.toString() === value
+                || data.date.toString() === value
+                || data.address.toLowerCase().includes(value.toLowerCase());
+        };
     }
+
 }
