@@ -53,6 +53,14 @@ export class PropertiesInRangePage {
     }
 
     applyFilter(value: string) {
-      this.allPropertiesInRange.filter = value.trim().toLowerCase();
+        this.allPropertiesInRange.filter = value.trim().toLowerCase();
+        this.allPropertiesInRange.filterPredicate = function(data, filter) {
+            if (filter.includes('$price') && filter.includes('>')) {
+                return data.price > Number(filter.replace('$price >', '').trim());
+            }
+            if (filter.includes('$price') && filter.includes('<')) {
+                return data.price < Number(filter.replace('$price <', '').trim());
+            }
+        }
     }
 }
