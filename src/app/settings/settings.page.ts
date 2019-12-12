@@ -12,15 +12,19 @@ import { SettingsModel } from './settings.model';
 export class SettingsPage implements OnInit {
     settings: SettingsModel;
     settingsForm: FormGroup;
+    colourToggle: boolean;
+    extremaToggle: boolean;
 
     constructor(private userSettings: SettingsService,
                 private _fb: FormBuilder,
                 private router: Router) {
         this.settings = new SettingsModel();
+        this.colourToggle = this.settings.gradientBool;
+        this.extremaToggle = this.settings.localExtrema;
     }
 
     ngOnInit(): void {
-        console.log(this.userSettings.settings);
+        // console.log(this.userSettings.settings);
         this.settings = this.userSettings.settings;
         this.settingsForm = this._fb.group({
             locInterval: this._fb.control(this.settings.locInterval, [Validators.required,
@@ -54,6 +58,8 @@ export class SettingsPage implements OnInit {
     }
 
     async onSaveSettings(): Promise<void> {
+        await this.toggleSave();
+        console.log('in onSaveSettings', this.settings);
         await this.userSettings.saveSettings(this.settings);
         await this.router.navigateByUrl('/home');
     }
@@ -61,4 +67,24 @@ export class SettingsPage implements OnInit {
     onResetChanges(): void {
 
     }
+
+    toggleSave(): void {
+        console.log('in on toggle save');
+        if (this.extremaToggle !== this.settings.localExtrema) {
+            this.settings.localExtrema = this.extremaToggle;
+        }
+        if (this.colourToggle !== this.settings.gradientBool) {
+            this.settings.gradientBool = this.colourToggle;
+        }
+    }
+
+    extremaChange(event: CustomEvent): void {
+        console.log(event);
+        this.extremaToggle = event.detail.checked;
+    }
+
+    colourChange(event): void {
+        this.colourToggle = event.detail.checked;
+    }
+
 }

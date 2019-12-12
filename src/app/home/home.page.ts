@@ -64,37 +64,6 @@ export class HomePage {
             zoom: 10,
             center: this.center
         };
-        this.cfg = ({
-            radius: 20,
-            maxOpacity: 0.8,
-            minOpacity: 0,
-            scaleRadius: false,
-            useLocalExtrema: true,
-            blur: 0.5,
-            latField: 'lat',
-            lngField: 'lng',
-            valueField: 'count',
-            gradient: {
-                0.001: '#ffffff',
-                0.1: '#ffe6e6',
-                0.2: '#ffcccc',
-                0.3: '#ffb3b3',
-                0.4: '#ff9999',
-                0.5: '#ff8080',
-                0.6: '#ff6666',
-                0.7: '#ff3333',
-                0.8: '#ff0000',
-                0.9: '#cc0000',
-                1: '#800000'
-            }
-        });
-        this.heatmapLayer = new HeatmapOverlay(this.cfg);
-        this.testData = {
-            max: 1,
-            min: 0,
-            data: []
-        };
-        this.houses = layerGroup();
     }
 
     ionViewWillEnter(): void {
@@ -111,7 +80,6 @@ export class HomePage {
             this._loadingIndicator = overlay;
             await overlay.present();
         });
-
     }
 
     ionViewWillLeave(): void {
@@ -120,6 +88,7 @@ export class HomePage {
 
     onMapReady(map: LeafletMap): void {
         this.map = map;
+        this.configureHeatmap();
         this.map.addLayer(this.heatmapLayer);
         this.userLoc.currentLocation()
             .then((geoObject: GeolocationPosition) => {
@@ -134,6 +103,51 @@ export class HomePage {
         });
     }
 
+    configureHeatmap(): void {
+        const redgradient: { [key: string]: string } = {
+            0.001: '#ffffff',
+            0.1: '#ffe6e6',
+            0.2: '#ffcccc',
+            0.3: '#ffb3b3',
+            0.4: '#ff9999',
+            0.5: '#ff8080',
+            0.6: '#ff6666',
+            0.7: '#ff3333',
+            0.8: '#ff0000',
+            0.9: '#cc0000',
+            1: '#800000'
+        };
+        const altgradient: { [key: string]: string } = {
+            0: 'Navy',
+            0.25: 'Blue',
+            0.5: 'Green',
+            0.75: 'Yellow',
+            1: 'Red'
+        };
+        const localExtrema = this.userSettings.settings.localExtrema;
+        const gradientBool = this.userSettings.settings.gradientBool;
+        console.log(gradientBool)
+        let grad: { [key: string]: string };
+        if (gradientBool === true) {
+            grad = altgradient;
+        } else {
+            grad = redgradient;
+        }
+        this.cfg = ({
+            radius: 20,
+            maxOpacity: 0.8,
+            minOpacity: 0,
+            scaleRadius: false,
+            useLocalExtrema: localExtrema,
+            blur: 0.5,
+            latField: 'lat',
+            lngField: 'lng',
+            valueField: 'count',
+            gradient: grad
+        });
+        this.heatmapLayer = new HeatmapOverlay(this.cfg);
+    }
+
     getHeatData(): void {
 
         const myList = this.allPropertiesInRange.map(data =>
@@ -144,11 +158,10 @@ export class HomePage {
             }));
 
         this.testData = {
-            max: 1,
-            min: 0,
+            max: Math.max(...myList.map(s => s.count)),
+            min: Math.min(...myList.map(s => s.count)),
             data: myList
         };
-
     }
 
     getHouseTypeData(): void {
@@ -168,7 +181,7 @@ export class HomePage {
                 html += `<br />Price is: ${prop.price}<br />House type: ${prop.housetype}<hr/>`;
                 this.propertiesListCoordinatesDisplay.set(prop.lng + prop.lat, html);
             } else {
-                this.propertiesListCoordinatesDisplay.set(prop.lng + prop.lat, `Price is: ${prop.price}<br />House type: ${prop.housetype}<hr/>`);
+                this.propertiesListCoordinatesDisplay.set(prop.lng + prop.lat, `Date Sold: ${prop.price}<br />Price: £${prop.price}<br />House Type: ${prop.housetype}<hr/>`);
             }
             const mapMarker = marker([prop.lat, prop.lng], {
                 icon: icon({
@@ -200,6 +213,7 @@ export class HomePage {
                 this.getHeatData();
                 this.getHouseTypeData();
                 this.heatmapLayer.setData(this.testData);
+                this.configureHeatmap();
                 this.layersControl = {
                     baseLayers: {},
                     overlays: {
