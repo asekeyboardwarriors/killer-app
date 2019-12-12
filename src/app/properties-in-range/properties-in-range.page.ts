@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { PropertyModel } from '../Models/properties/property-model';
@@ -14,7 +15,7 @@ import { SettingsService } from '../services/Settings/settings.service';
 export class PropertiesInRangePage {
 
     displayedColumns: Array<string> = ['price', 'date', 'housetype', 'duration', 'address'];
-    allPropertiesInRange: PropertyModel[];
+    allPropertiesInRange: MatTableDataSource<PropertyModel>;
 
     private _sub: Subscription = new Subscription();
     private _loadingIndicator: HTMLIonLoadingElement;
@@ -39,7 +40,7 @@ export class PropertiesInRangePage {
                 radius: this._settings.settings.distance
             })
                 .subscribe(async (propertiesInRange: PropertyModel[]) => {
-                    this.allPropertiesInRange = propertiesInRange;
+                    this.allPropertiesInRange = new MatTableDataSource<PropertyModel>(propertiesInRange);
                     await this._loadingIndicator.dismiss();
                 }, async error => {
                     await this._loadingIndicator.dismiss();
@@ -49,5 +50,9 @@ export class PropertiesInRangePage {
 
     ionViewWillLeave(): void {
         this._sub.unsubscribe();
+    }
+
+    applyFilter(value: string) {
+      this.allPropertiesInRange.filter = value.trim().toLowerCase();
     }
 }

@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
-import { MatTableModule } from '@angular/material';
+import { MatInputModule, MatTableModule } from '@angular/material';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
@@ -21,7 +22,9 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    MatTableModule
+    MatTableModule,
+    FlexModule,
+    MatInputModule
   ],
   declarations: [PropertiesInRangePage]
 })
